@@ -195,7 +195,7 @@ const Nav = () => {
 
 const Hero = () => {
   return (
-    <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden">
+    <section className="relative pt-20 pb-20 md:pt-32 md:pb-32 overflow-hidden">
       {/* Abstract Background */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 opacity-20 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-accent/30 rounded-full blur-[120px]" />
