@@ -434,7 +434,7 @@ const Flywheel = () => {
   }, []);
 
   return (
-    <section id="flywheel" className="relative py-24 overflow-hidden bg-dark">
+    <section id="flywheel" className="relative pt-24 pb-48 overflow-hidden bg-dark">
       {/* Subtle Background Effects */}
       <div className="absolute inset-0 pointer-events-none opacity-20">
         {[...Array(6)].map((_, i) => (
