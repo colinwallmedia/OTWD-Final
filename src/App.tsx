@@ -22,7 +22,11 @@ import {
   Mail,
   BarChart3,
   Search,
-  Users
+  Users,
+  Palette,
+  PoundSterling,
+  Monitor,
+  Layout
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -40,7 +44,7 @@ const Button = ({
   [key: string]: any;
 }) => {
   const variants = {
-    primary: 'bg-accent text-dark hover:bg-accent/90 shadow-[0_0_20px_rgba(244,161,0,0.3)]',
+    primary: 'bg-accent text-dark hover:bg-accent/90 shadow-lg shadow-accent/20',
     secondary: 'bg-white text-dark hover:bg-white/90',
     outline: 'border border-white/20 text-white hover:bg-white/5'
   };
@@ -99,6 +103,35 @@ const GlassCard = ({ children, className = '', delay = 0 }: { children: React.Re
   </motion.div>
 );
 
+// --- Themes ---
+
+const THEMES = [
+  { name: 'Amber', color: '#f4a100' },
+  { name: 'Green', color: '#00df9a' },
+  { name: 'Neon', color: '#D1FE17' }
+];
+
+const ThemeSwitcher = () => {
+  const [currentTheme, setCurrentTheme] = useState(0);
+
+  const toggleTheme = () => {
+    const next = (currentTheme + 1) % THEMES.length;
+    setCurrentTheme(next);
+    document.documentElement.style.setProperty('--accent-color', THEMES[next].color);
+  };
+
+  return (
+    <button 
+      onClick={toggleTheme}
+      className="p-2 rounded-full glass hover:bg-white/10 transition-all flex items-center gap-2 group"
+      title="Switch Theme"
+    >
+      <Palette className="w-5 h-5 text-accent group-hover:rotate-12 transition-transform" />
+      <span className="text-xs font-bold uppercase tracking-widest hidden lg:block">{THEMES[currentTheme].name}</span>
+    </button>
+  );
+};
+
 // --- Sections ---
 
 const Nav = () => {
@@ -115,8 +148,7 @@ const Nav = () => {
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-dark/80 backdrop-blur-md py-4 border-b border-white/5' : 'py-6'}`}>
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center font-display font-bold text-dark text-xl">OTW</div>
-          <span className="font-display font-bold text-xl tracking-tight hidden sm:block">Off The Wall <span className="text-accent">Digital</span></span>
+          <span className="font-display font-bold text-xl tracking-tight">Off The Wall <span className="text-accent">Digital</span></span>
         </div>
 
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-white/70">
@@ -126,13 +158,17 @@ const Nav = () => {
           <a href="#pricing" className="hover:text-accent transition-colors">Pricing</a>
         </div>
 
-        <div className="hidden md:block">
+        <div className="hidden md:flex items-center gap-4">
+          <ThemeSwitcher />
           <Button variant="primary" className="text-sm py-2 px-5">Book a Call</Button>
         </div>
 
-        <button className="md:hidden text-white" onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? <X /> : <Menu />}
-        </button>
+        <div className="md:hidden flex items-center gap-4">
+          <ThemeSwitcher />
+          <button className="text-white" onClick={() => setIsOpen(!isOpen)}>
+            {isOpen ? <X /> : <Menu />}
+          </button>
+        </div>
       </div>
 
       <AnimatePresence>
@@ -157,106 +193,171 @@ const Nav = () => {
   );
 };
 
-const Hero = () => (
-  <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden">
-    {/* Abstract Background */}
-    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 opacity-20 pointer-events-none">
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-accent/30 rounded-full blur-[120px]" />
-      <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-accent/20 rounded-full blur-[100px]" />
-    </div>
-
-    <div className="max-w-7xl mx-auto px-6 text-center">
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold mb-6 tracking-tighter text-balance">
-          Your Website Should Be <span className="text-accent italic">Working</span> While You Are.
-        </h1>
-        <p className="text-xl md:text-2xl text-white/60 max-w-3xl mx-auto mb-10 text-balance">
-          A conversion-optimised website, AI that responds in 60 seconds, and a system that turns 5-star reviews into a flood of new enquiries — all in one.
-        </p>
-      </motion.div>
-
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.6 }}
-        className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
-      >
-        <Button variant="primary" className="w-full sm:w-auto text-lg px-8 py-4">
-          See How It Works <ArrowRight className="w-5 h-5" />
-        </Button>
-        <Button variant="outline" className="w-full sm:w-auto text-lg px-8 py-4">
-          Book a Free 10-Minute Call
-        </Button>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.4, duration: 1 }}
-        className="grid grid-cols-2 md:grid-cols-4 gap-8 py-8 border-y border-white/10"
-      >
-        {[
-          { label: '+38% Enquiry Rate' },
-          { label: '£42k Booked in 90 Days' },
-          { label: '60 sec AI Response' },
-          { label: '4.9★ Rating' }
-        ].map((stat, i) => (
-          <div key={i} className="text-center">
-            <div className="text-accent font-display font-bold text-xl md:text-2xl">{stat.label}</div>
-          </div>
-        ))}
-      </motion.div>
-
-      <div className="mt-12 flex flex-wrap justify-center items-center gap-8 opacity-40 grayscale">
-        {/* Trust Badges Placeholders */}
-        <div className="font-display font-bold text-xl">TRUSTED TRADES</div>
-        <div className="font-display font-bold text-xl">UK BUILT</div>
-        <div className="font-display font-bold text-xl">5-STAR RATED</div>
+const Hero = () => {
+  return (
+    <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden">
+      {/* Abstract Background */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 opacity-20 pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-accent/30 rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-accent/20 rounded-full blur-[100px]" />
       </div>
-    </div>
-  </section>
-);
+
+      <div className="max-w-7xl mx-auto px-6 text-center">
+        {/* 1. Pill Badge */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-accent/30 bg-accent/5 text-accent text-sm font-bold mb-8"
+        >
+          <Star className="w-4 h-4 fill-accent" />
+          <span>From First Enquiry to 5-Star Review</span>
+        </motion.div>
+
+        {/* 2. Headline */}
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.6 }}
+          className="text-5xl md:text-7xl lg:text-8xl font-display font-bold mb-8 tracking-tighter text-balance"
+        >
+          Your Website Should Be <span className="text-accent italic">Working</span> While You Are.
+        </motion.h1>
+
+        {/* 3. Sub-headline */}
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="text-xl md:text-2xl text-white/60 max-w-4xl mx-auto mb-8 leading-relaxed text-balance"
+        >
+          Every enquiry answered within 60 seconds, quote and book jobs, outrank your competitors so the enquiries come to you first. Automatically.
+        </motion.p>
+
+        {/* 4. Objection Killer Line */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.6 }}
+          className="text-lg md:text-xl text-white/80 mb-12 mt-12"
+        >
+          No Tech Skill Required - Managed from the palm of your hand
+        </motion.p>
+
+        {/* 5. CTA Buttons */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.6 }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
+        >
+          <Button variant="primary" className="w-full sm:w-auto text-lg px-8 py-4">
+            See How It Works <ArrowRight className="w-5 h-5" />
+          </Button>
+          <Button variant="outline" className="w-full sm:w-auto text-lg px-8 py-4">
+            Book a Free 10-Minute Call
+          </Button>
+        </motion.div>
+
+        {/* 6. Trust Indicators */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 1 }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-8 py-8 border-y border-white/10"
+        >
+          {[
+            { label: '+38% Enquiry Rate' },
+            { label: '£42k Booked in 90 Days' },
+            { label: '60 sec AI Response' },
+            { label: '4.9★ Rating' }
+          ].map((stat, i) => (
+            <div key={i} className="text-center">
+              <div className="text-accent font-display font-bold text-xl md:text-2xl">{stat.label}</div>
+            </div>
+          ))}
+        </motion.div>
+
+        <div className="mt-12 flex flex-wrap justify-center items-center gap-8 opacity-40 grayscale">
+          <div className="font-display font-bold text-xl">TRUSTED TRADES</div>
+          <div className="font-display font-bold text-xl">UK BUILT</div>
+          <div className="font-display font-bold text-xl">5-STAR RATED</div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
 const Problem = () => {
   const problems = [
-    { icon: <Phone className="text-accent" />, title: "Missed Calls", desc: "Every silent phone is a customer dialling your competitor." },
-    { icon: <Clock className="text-accent" />, title: "Slow Replies", desc: "The first to respond wins the job. If it's not you in 60 seconds, it's someone else." },
-    { icon: <TrendingUp className="text-accent" />, title: "Lost Leads", desc: "You paid for that click. No follow-up system means money down the drain." },
-    { icon: <Inbox className="text-accent" />, title: "Inbox Chaos", desc: "Facebook, WhatsApp, Email, SMS — a notification nightmare with no way to keep track." },
-    { icon: <Zap className="text-accent" />, title: "Zero Follow-Up", desc: "80% of sales happen after the 5th contact. Most businesses stop at zero." },
-    { icon: <Smartphone className="text-accent" />, title: "Weak Website", desc: "If your site looks outdated, customers won't trust you with their modern projects." },
-    { icon: <Star className="text-accent" />, title: "Bad Reviews", desc: "No review system means no control over your reputation." }
+    { icon: <MessageSquare className="text-accent" />, title: "Missed Enquiries", desc: "Every unanswered message is a customer moving on to your competitor." },
+    { icon: <Clock className="text-accent" />, title: "Slow Replies", desc: "The first to reply wins the job. If you're not responding in 60 seconds, someone else already is." },
+    { icon: <TrendingUp className="text-accent" />, title: "Lost Leads", desc: "You paid for that enquiry. No follow-up system means money straight down the drain." },
+    { icon: <Inbox className="text-accent" />, title: "Inbox Chaos", desc: "WhatsApp, Instagram, Email, text: messages everywhere, jobs slipping through the cracks." },
+    { icon: <Zap className="text-accent" />, title: "Zero Follow-Up", desc: "80% of jobs are won after the 5th contact. Most businesses give up after the first." },
+    { icon: <Smartphone className="text-accent" />, title: "Weak Website", desc: "If your site looks outdated, customers won't trust you before you've even said hello." },
+    { icon: <Star className="text-accent" />, title: "Bad Reviews", desc: "One bad review can cost you ten jobs. Without a system, you're leaving your reputation to chance." }
   ];
 
   return (
-    <section id="problem" className="py-24 bg-dark">
+    <section id="problem" className="py-32 bg-dark">
       <div className="max-w-7xl mx-auto px-6">
         <SectionHeading 
-          title="The Cost of Doing Business the Old Way" 
-          subtitle="Most tradespeople are losing thousands every month because their digital front door is broken."
+          title="Sound Familiar?" 
+          subtitle="Most tradespeople are losing thousands every month to problems they don't even know they have."
         />
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {problems.map((p, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="glass glass-hover p-8 rounded-2xl flex flex-col gap-4"
+              transition={{ delay: i * 0.08 }}
+              whileHover={{ 
+                y: -4,
+                boxShadow: "0 0 20px rgba(244, 161, 0, 0.15)",
+                borderColor: "rgba(244, 161, 0, 0.3)"
+              }}
+              className="glass p-8 rounded-2xl flex flex-col gap-4 border border-white/5 transition-all duration-300"
             >
-              <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center">
-                {p.icon}
-              </div>
+              <motion.div 
+                whileHover={{ scale: 1.1 }}
+                className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center group"
+              >
+                <div className="group-hover:animate-pulse">
+                  {p.icon}
+                </div>
+              </motion.div>
               <h3 className="text-xl font-display font-bold">{p.title}</h3>
               <p className="text-white/60 leading-relaxed">{p.desc}</p>
             </motion.div>
           ))}
+
+          {/* Card 8 - CTA Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 7 * 0.08 }}
+            whileHover={{ 
+              scale: 1.03,
+              boxShadow: "0 0 30px rgba(255, 255, 255, 0.3), inset 0 0 20px rgba(255, 255, 255, 0.4)"
+            }}
+            className="bg-accent p-8 rounded-2xl flex flex-col gap-4 shadow-[inset_0_0_20px_rgba(255,255,255,0.2)] cursor-pointer group transition-all duration-300"
+          >
+            <div className="w-12 h-12 bg-dark rounded-xl flex items-center justify-center">
+              <Zap className="text-accent w-6 h-6" />
+            </div>
+            <h3 className="text-xl font-display font-bold text-dark">Sound familiar?</h3>
+            <p className="text-dark font-medium">We fix all of this.</p>
+            <div className="mt-auto">
+              <a href="#flywheel" className="text-dark font-bold flex items-center gap-2 group-hover:gap-3 transition-all">
+                See The Solution <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>
@@ -272,72 +373,234 @@ const SolutionIntro = () => (
         viewport={{ once: true }}
         className="text-3xl md:text-5xl font-display font-bold leading-tight"
       >
-        We don't just build websites. We build systems that make you the most responsive business in your area.
+        We don't just build websites. We build growth systems that book you more jobs and make you the most trusted and responsive business in your area
       </motion.p>
     </div>
   </section>
 );
 
 const Flywheel = () => {
+  const [activeStep, setActiveStep] = useState(0);
+  const [hoveredStep, setHoveredStep] = useState<number | null>(null);
+
   const steps = [
-    "Website captures lead",
-    "AI responds in 60 seconds",
-    "CRM manages conversation",
-    "Job gets booked",
-    "Review request sent",
-    "5-star reviews boost Google Maps ranking",
-    "More leads find you",
-    "Repeat"
+    { 
+      title: "Website captures lead", 
+      icon: <MousePointerClick className="w-5 h-5" />, 
+      benefit: "Your 24/7 digital storefront never sleeps, catching every opportunity." 
+    },
+    { 
+      title: "Agent responds in 60 seconds", 
+      icon: <Clock className="w-5 h-5" />, 
+      benefit: "Instant engagement while the lead is hot, beating competitors to the punch." 
+    },
+    { 
+      title: "CRM tracks conversations", 
+      icon: <Users className="w-5 h-5" />, 
+      benefit: "Never lose a lead in the noise again. Every chat is organized and tracked." 
+    },
+    { 
+      title: "Agent quotes job", 
+      icon: <Zap className="w-5 h-5" />, 
+      benefit: "Professional quotes sent in minutes, showing customers you're the pro." 
+    },
+    { 
+      title: "Jobs get booked", 
+      icon: <CheckCircle2 className="w-5 h-5" />, 
+      benefit: "A consistent flow of high-value work booked directly into your calendar." 
+    },
+    { 
+      title: "Review requested", 
+      icon: <MessageSquare className="w-5 h-5" />, 
+      benefit: "Automated requests build your social proof without you lifting a finger." 
+    },
+    { 
+      title: "5 Star review boost trust", 
+      icon: <Star className="w-5 h-5" />, 
+      benefit: "Dominate local search and Google Maps with a perfect reputation." 
+    },
+    { 
+      title: "More customers find you", 
+      icon: <TrendingUp className="w-5 h-5" />, 
+      benefit: "Organic growth that compounds over time, lowering your lead costs." 
+    }
   ];
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveStep((prev) => (prev + 1) % steps.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <section id="flywheel" className="py-24 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="flywheel" className="relative py-24 overflow-hidden bg-dark">
+      {/* Subtle Background Effects */}
+      <div className="absolute inset-0 pointer-events-none opacity-20">
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={i}
+            animate={{
+              x: [0, Math.random() * 100 - 50, 0],
+              y: [0, Math.random() * 100 - 50, 0],
+              rotate: [0, 180, 360],
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              duration: 10 + Math.random() * 10,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+            className="absolute w-64 h-64 border border-accent/10 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
         <SectionHeading 
           title="The Growth Flywheel" 
           subtitle="A self-sustaining loop that grows your business while you're on the tools."
         />
 
-        <div className="relative flex flex-col items-center">
+        <div className="relative flex flex-col items-center min-h-[600px] justify-center">
           {/* Animated Loop Visualization */}
           <div className="relative w-full max-w-2xl aspect-square flex items-center justify-center">
-            {/* Rotating Outer Ring */}
-            <div className="absolute inset-0 border-2 border-dashed border-accent/20 rounded-full animate-flywheel" />
+            {/* Animated Connector Path (Desktop) */}
+            <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full pointer-events-none overflow-visible">
+              <motion.circle
+                cx="50"
+                cy="50"
+                r="48"
+                fill="none"
+                stroke="var(--accent-color)"
+                strokeWidth="0.5"
+                strokeDasharray="1, 4"
+                animate={{
+                  strokeDashoffset: [0, -20]
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+                className="opacity-40"
+              />
+            </svg>
             
-            {/* Center Logo/Icon */}
-            <div className="z-10 w-32 h-32 bg-accent rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(244,161,0,0.4)]">
+            {/* Active Step Path Animation */}
+            <svg viewBox="0 0 100 100" className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none overflow-visible">
+              <motion.circle
+                cx="50"
+                cy="50"
+                r="48"
+                fill="none"
+                stroke="var(--accent-color)"
+                strokeWidth="1"
+                strokeDasharray="10 1000"
+                animate={{
+                  rotate: activeStep * (360 / steps.length)
+                }}
+                transition={{
+                  duration: 0.8,
+                  ease: "easeInOut"
+                }}
+                className="opacity-60"
+              />
+            </svg>
+
+            {/* Center Logo/Icon with Pulse */}
+            <motion.div 
+              animate={{
+                scale: [1, 1.05, 1],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="z-10 w-32 h-32 bg-accent rounded-full flex items-center justify-center shadow-[0_0_50px_var(--accent-color)] relative"
+            >
+              <motion.div 
+                animate={{
+                  scale: [1, 1.4, 1],
+                  opacity: [0.3, 0, 0.3],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+                className="absolute inset-0 bg-accent rounded-full -z-10"
+              />
               <TrendingUp className="w-16 h-16 text-dark" />
-            </div>
+            </motion.div>
 
             {/* Steps positioned around the circle */}
             {steps.map((step, i) => {
-              const angle = (i / steps.length) * Math.PI * 2;
-              const radius = 45; // percentage
+              // Adjust angle so first item is at 12 o'clock (top)
+              // 0 degrees in Math is 3 o'clock, so we subtract PI/2
+              const angle = (i / steps.length) * Math.PI * 2 - Math.PI / 2;
+              const radius = 48; // percentage (increased from 42)
               const x = 50 + radius * Math.cos(angle);
               const y = 50 + radius * Math.sin(angle);
 
+              const isActive = activeStep === i;
+
               return (
-                <motion.div
+                <div
                   key={i}
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.2 }}
                   style={{ left: `${x}%`, top: `${y}%` }}
-                  className="absolute -translate-x-1/2 -translate-y-1/2 glass px-4 py-2 rounded-full text-xs md:text-sm font-semibold whitespace-nowrap z-20 border-accent/30"
+                  className="absolute -translate-x-1/2 -translate-y-1/2 z-20"
+                  onMouseEnter={() => setHoveredStep(i)}
+                  onMouseLeave={() => setHoveredStep(null)}
                 >
-                  {step}
-                </motion.div>
+                  <motion.button
+                    animate={{
+                      scale: isActive ? 1.1 : 1,
+                      backgroundColor: isActive ? "var(--accent-color)" : "rgba(255, 255, 255, 0.05)",
+                      color: isActive ? "#0a0a0a" : "#ffffff",
+                      boxShadow: isActive ? "0 0 20px var(--accent-color)" : "none"
+                    }}
+                    className="flex items-center gap-3 px-4 py-3 rounded-full glass border-accent/20 transition-all duration-300 whitespace-nowrap"
+                  >
+                    <span className={isActive ? "text-dark" : "text-accent"}>{step.icon}</span>
+                    <span className="text-xs md:text-sm font-bold">{step.title}</span>
+                  </motion.button>
+
+                  {/* Hover Benefit Card */}
+                  <AnimatePresence>
+                    {hoveredStep === i && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-64 glass p-4 rounded-xl z-50 border-accent/30 shadow-2xl"
+                      >
+                        <div className="text-accent font-display font-bold text-sm mb-1 uppercase tracking-widest">Benefit</div>
+                        <div className="text-white text-sm leading-relaxed">{step.benefit}</div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               );
             })}
           </div>
 
-          {/* Mobile List Version (for better readability on small screens) */}
-          <div className="md:hidden mt-12 space-y-4 w-full">
+          {/* Mobile List Version */}
+          <div className="md:hidden mt-20 space-y-4 w-full px-4">
             {steps.map((step, i) => (
-              <div key={i} className="flex items-center gap-4 glass p-4 rounded-xl">
-                <div className="w-8 h-8 bg-accent text-dark rounded-full flex items-center justify-center font-bold">{i + 1}</div>
-                <span className="font-semibold">{step}</span>
+              <div key={i} className={`flex items-center gap-4 glass p-4 rounded-xl border-l-4 ${activeStep === i ? 'border-accent' : 'border-transparent'}`}>
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${activeStep === i ? 'bg-accent text-dark' : 'bg-white/5 text-accent'}`}>
+                  {step.icon}
+                </div>
+                <div>
+                  <div className="font-bold text-sm">{step.title}</div>
+                  <div className="text-xs text-white/40">{step.benefit}</div>
+                </div>
               </div>
             ))}
           </div>
@@ -349,12 +612,36 @@ const Flywheel = () => {
 
 const Features = () => {
   const features = [
-    { icon: <Smartphone />, title: "Lead-Gen Website", desc: "A 24/7 salesperson that closes deals while you're on the tools." },
-    { icon: <Clock />, title: "AI Chat — 60 Seconds", desc: "Responds to every enquiry instantly. Even at 11pm on a Sunday." },
-    { icon: <MessageSquare />, title: "Missed Call Text-Back", desc: "Can't answer? An automatic text fires back the moment a call goes unanswered." },
-    { icon: <Inbox />, title: "One Inbox", desc: "WhatsApp, Insta, FB, SMS, Email — every message in one place." },
-    { icon: <Star />, title: "5-Star Review Engine", desc: "Automated review requests that push you higher in Google Maps." },
-    { icon: <Smartphone />, title: "Mobile App", desc: "Manage leads, messages and your business from any job site." }
+    { 
+      icon: <Monitor />, 
+      title: "Lead-Gen Website", 
+      desc: "Your 24/7 salesperson. Captures every enquiry and closes deals while you are on the tools." 
+    },
+    { 
+      icon: <Zap />, 
+      title: "60-Second AI Response", 
+      desc: "Every enquiry gets a reply in 60 seconds, day or night, job or no job. First to reply wins." 
+    },
+    { 
+      icon: <MessageSquare />, 
+      title: "Never Miss an Enquiry", 
+      desc: "On a job? The system replies instantly on your behalf so no enquiry ever goes cold." 
+    },
+    { 
+      icon: <Inbox />, 
+      title: "One Inbox", 
+      desc: "WhatsApp, Instagram, Facebook, text, Email. Every message, one place, zero chaos." 
+    },
+    { 
+      icon: <Star />, 
+      title: "5-Star Review Engine", 
+      desc: "Automated review requests that build your reputation, boost your Google Maps ranking, and pull enquiries away from your competitors." 
+    },
+    { 
+      icon: <Smartphone />, 
+      title: "Run Everything From Your Phone", 
+      desc: "No office. No tech skills. Your entire business in the palm of your hand, from the job site or the sofa." 
+    }
   ];
 
   return (
@@ -362,7 +649,7 @@ const Features = () => {
       <div className="max-w-7xl mx-auto px-6">
         <SectionHeading 
           title="Everything You Need. Nothing You Don't." 
-          subtitle="Built specifically for trades businesses who want to dominate their local area."
+          subtitle="Built for trades businesses who want to dominate their local area and never lose an enquiry again."
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -372,11 +659,22 @@ const Features = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="glass glass-hover p-8 rounded-2xl group"
+              transition={{ delay: i * 0.08 }}
+              whileHover={{ 
+                y: -4,
+                boxShadow: "0 0 20px rgba(244, 161, 0, 0.15)",
+                borderColor: "rgba(244, 161, 0, 0.3)"
+              }}
+              className="glass p-8 rounded-2xl group border border-white/5 transition-all duration-300"
             >
-              <div className="w-14 h-14 bg-accent/10 text-accent rounded-2xl flex items-center justify-center mb-6 group-hover:bg-accent group-hover:text-dark transition-all duration-300">
-                {f.icon}
+              <div className="w-14 h-14 bg-accent/10 text-accent rounded-2xl flex items-center justify-center mb-6 group-hover:bg-accent group-hover:text-dark transition-all duration-300 relative overflow-hidden">
+                <motion.div
+                  whileHover={{ scale: 1.2, opacity: 0.8 }}
+                  className="absolute inset-0 bg-accent/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"
+                />
+                <div className="relative z-10 group-hover:scale-110 transition-transform duration-300">
+                  {f.icon}
+                </div>
               </div>
               <h3 className="text-2xl font-display font-bold mb-4">{f.title}</h3>
               <p className="text-white/60 text-lg leading-relaxed">{f.desc}</p>
@@ -396,30 +694,82 @@ const HowItWorks = () => {
   ];
 
   return (
-    <section className="py-24">
+    <section className="py-32 relative overflow-hidden">
+      {/* Background Decorative Element */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-4xl -z-10 opacity-10">
+        <div className="absolute inset-0 bg-accent/20 blur-[120px] rounded-full" />
+      </div>
+
       <div className="max-w-7xl mx-auto px-6">
-        <SectionHeading title="From Zero to Live in 48 Hours" />
+        <SectionHeading 
+          title="From Zero to Live in 48 Hours" 
+          subtitle="Our streamlined process gets you up and running without any downtime."
+        />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
-          {/* Connector Line (Desktop) */}
-          <div className="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-white/5 -translate-y-1/2 -z-10" />
+        <div className="relative">
+          {/* Animated Connector Path (Desktop) */}
+          <div className="hidden md:block absolute top-8 left-[15%] right-[15%] h-px -z-10">
+            <svg width="100%" height="2" viewBox="0 0 100 2" preserveAspectRatio="none" className="overflow-visible">
+              <path 
+                d="M 0 1 L 100 1" 
+                stroke="rgba(255,255,255,0.1)" 
+                strokeWidth="0.5" 
+                fill="none" 
+              />
+              <motion.path 
+                d="M 0 1 L 100 1" 
+                stroke="var(--accent-color)" 
+                strokeWidth="1" 
+                fill="none"
+                strokeDasharray="1, 5"
+                animate={{
+                  strokeDashoffset: [0, -20]
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+              />
+            </svg>
+          </div>
 
-          {steps.map((s, i) => (
-            <motion.div 
-              key={i}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.2 }}
-              className="text-center"
-            >
-              <div className="w-16 h-16 bg-accent text-dark rounded-full flex items-center justify-center text-2xl font-display font-bold mx-auto mb-8 shadow-[0_0_30px_rgba(244,161,0,0.3)]">
-                {s.step}
-              </div>
-              <h3 className="text-2xl font-display font-bold mb-4">{s.title}</h3>
-              <p className="text-white/60 text-lg">{s.desc}</p>
-            </motion.div>
-          ))}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-24">
+            {steps.map((s, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.2 }}
+                className="relative group"
+              >
+                <div className="flex flex-col items-center text-center">
+                  {/* Step Number Circle */}
+                  <div className="relative mb-8">
+                    <motion.div 
+                      animate={{
+                        boxShadow: ["0 0 20px rgba(var(--accent-color), 0.2)", "0 0 40px rgba(var(--accent-color), 0.4)", "0 0 20px rgba(var(--accent-color), 0.2)"]
+                      }}
+                      transition={{ duration: 3, repeat: Infinity }}
+                      className="w-16 h-16 bg-accent text-dark rounded-full flex items-center justify-center text-2xl font-display font-bold relative z-10"
+                    >
+                      {s.step}
+                    </motion.div>
+                    
+                    {/* Outer Ring */}
+                    <div className="absolute inset-[-8px] border border-accent/20 rounded-full group-hover:border-accent/50 transition-colors duration-500" />
+                  </div>
+
+                  {/* Content Card */}
+                  <div className="glass p-8 rounded-2xl border border-white/5 group-hover:border-accent/20 transition-all duration-500 w-full">
+                    <h3 className="text-2xl font-display font-bold mb-4 group-hover:text-accent transition-colors">{s.title}</h3>
+                    <p className="text-white/60 text-lg leading-relaxed">{s.desc}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -428,66 +778,159 @@ const HowItWorks = () => {
 
 const Pricing = () => {
   const features = [
-    "Lead-Gen Website", "AI Chat Widget", "Missed Call Text-Back", 
-    "All-in-One CRM", "Unified Inbox", "5-Star Review Engine", 
-    "Full Mobile App", "Broadcast Messaging", "Zero Setup Fees", "No Contracts"
+    { name: "Lead-Gen Website", outcome: "Turns visitors into booked jobs" },
+    { name: "60-Second AI Response", outcome: "Never lose an enquiry to a slow reply" },
+    { name: "Never Miss an Enquiry", outcome: "Instant reply even when you are on the tools" },
+    { name: "All-in-One CRM", outcome: "Every lead tracked, nothing falls through" },
+    { name: "Unified Inbox", outcome: "All messages, one place, zero chaos" },
+    { name: "5-Star Review Engine", outcome: "More reviews, higher rankings, more jobs" },
+    { name: "Full Mobile App", outcome: "Run your entire business from your phone" },
+    { name: "Broadcast Messaging", outcome: "Promote your business to past customers instantly" },
+    { name: "Zero Setup Fees", outcome: "Nothing to pay upfront, ever" },
+    { name: "No Contracts", outcome: "Cancel anytime, no questions asked" }
+  ];
+
+  const payoffBlocks = [
+    {
+      icon: <PoundSterling className="w-8 h-8 text-accent" />,
+      title: "Extra £2,000 Revenue. Zero Extra Effort.",
+      body: "Jobs you are currently losing to faster competitors, won back automatically."
+    },
+    {
+      icon: <Clock className="w-8 h-8 text-accent" />,
+      title: "2 to 4 Hours Saved Every Day",
+      body: "No more chasing leads, juggling inboxes or manually sending review requests."
+    },
+    {
+      icon: <TrendingUp className="w-8 h-8 text-accent" />,
+      title: "20% More Job Enquiries",
+      body: "A higher ranked, always responsive business that customers find and trust first."
+    }
   ];
 
   return (
-    <section id="pricing" className="py-24 bg-dark">
+    <section id="pricing" className="py-32 bg-dark">
       <div className="max-w-7xl mx-auto px-6">
-        <SectionHeading title="Simple, Transparent Pricing" />
+        <SectionHeading 
+          title="Less Than £10 a Day to Replace Your Admin." 
+          subtitle="The price of 15 minutes of your time. Get back 2 to 4 hours every single day."
+        />
 
-        <div className="max-w-4xl mx-auto">
-          <GlassCard className="border-accent/30 relative overflow-hidden">
-            {/* Accent Badge */}
-            <div className="absolute top-0 right-0 bg-accent text-dark px-6 py-2 rounded-bl-2xl font-bold text-sm uppercase tracking-wider">
-              Most Popular
+        <div className="max-w-[900px] mx-auto space-y-32">
+          {/* Part 1: Cost Comparison Table */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="space-y-8 max-w-2xl mx-auto"
+          >
+            <h3 className="text-2xl font-display font-bold text-center">What It's Costing You Right Now</h3>
+            <div className="glass overflow-hidden rounded-2xl border border-white/5 shadow-2xl">
+              <div className="p-8 md:p-10 space-y-6">
+                <div className="flex justify-between items-center py-4 border-b border-white/5">
+                  <span className="text-white/80 text-lg">Part-time receptionist or admin</span>
+                  <span className="font-bold text-xl">£800/mo</span>
+                </div>
+                <div className="flex justify-between items-center py-4 border-b border-white/5">
+                  <span className="text-white/80 text-lg">1 missed job per week from slow or no response</span>
+                  <span className="font-bold text-xl text-red-400">£2,000+/mo</span>
+                </div>
+                <div className="flex justify-between items-center py-8 bg-accent/10 -mx-10 px-10 border-y border-accent/20">
+                  <span className="text-accent font-display font-bold text-xl">What you are really losing</span>
+                  <span className="text-accent font-display font-bold text-3xl line-through decoration-white/30 decoration-4">£2,800+/mo</span>
+                </div>
+              </div>
+            </div>
+            <p className="text-center text-white/40 text-sm italic">
+              Based on average UK trade job values. Most businesses do not realise the leak until they fix it.
+            </p>
+          </motion.div>
+
+          {/* Part 2: Payoff Statement Blocks */}
+          <div className="space-y-16">
+            <h3 className="text-3xl font-display font-bold text-center">Imagine Your Business With...</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
+              {payoffBlocks.map((block, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.08 }}
+                  className="text-center space-y-4"
+                >
+                  <div className="w-16 h-16 bg-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    {block.icon}
+                  </div>
+                  <h4 className="text-xl font-display font-bold text-white">{block.title}</h4>
+                  <p className="text-white/60 leading-relaxed">{block.body}</p>
+                </motion.div>
+              ))}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-              <div>
-                <div className="text-accent font-display font-bold text-6xl mb-2">£297<span className="text-xl text-white/40">/month</span></div>
-                <p className="text-white/60 mb-8">No contracts. Live in 48 hours. Cancel anytime.</p>
-                
-                <div className="space-y-4 mb-8">
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="text-center py-12 space-y-6 text-2xl md:text-4xl leading-relaxed max-w-3xl mx-auto"
+            >
+              <p>That is not just a better business.</p>
+              <p>That is <span className="text-accent font-bold">school pickups</span> you do not miss.</p>
+              <p><span className="text-accent font-bold">Weekends</span> you actually switch off.</p>
+              <p><span className="text-accent font-bold">Evenings with your family</span> instead of your inbox.</p>
+              <p className="pt-4 font-bold">One system. Less than £10 a day.</p>
+            </motion.div>
+          </div>
+
+          {/* Part 3: Pricing Card */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.97 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="max-w-[700px] mx-auto"
+          >
+            <GlassCard className="border-accent/30 relative overflow-hidden p-0">
+              {/* Everything Included Badge */}
+              <div className="absolute top-0 right-0 bg-accent text-dark px-6 py-2 rounded-bl-2xl font-bold text-sm uppercase tracking-wider">
+                Everything Included
+              </div>
+
+              <div className="p-8 md:p-12 space-y-12">
+                <div className="text-center space-y-4">
+                  <div className="flex items-baseline justify-center gap-2">
+                    <span className="text-accent font-display font-bold text-7xl">£297</span>
+                    <span className="text-xl text-white/60">/month</span>
+                  </div>
+                  <p className="text-white/40 text-sm">No contracts. Live in 48 hours. Cancel anytime.</p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
                   {features.map((f, i) => (
-                    <div key={i} className="flex items-center gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-accent" />
-                      <span className="font-medium">{f}</span>
+                    <div key={i} className="flex items-start gap-3">
+                      <CheckCircle2 className="w-5 h-5 text-accent shrink-0 mt-0.5" />
+                      <div>
+                        <div className="font-bold text-white text-sm">{f.name}</div>
+                        <div className="text-xs italic text-white/40">{f.outcome}</div>
+                      </div>
                     </div>
                   ))}
                 </div>
 
-                <Button variant="primary" className="w-full py-4 text-lg">Get Started Now</Button>
-              </div>
+                <div className="bg-accent/5 border border-accent/20 rounded-2xl p-6 text-center italic text-white">
+                  "One new job a month pays for everything. At the average UK trade job value, this pays for itself with a single booking."
+                </div>
 
-              <div className="bg-white/5 rounded-2xl p-8 border border-white/10">
-                <h4 className="text-xl font-display font-bold mb-6">Value Comparison</h4>
-                <div className="space-y-6">
-                  <div className="flex justify-between items-center pb-4 border-b border-white/5">
-                    <span className="text-white/60">Agency Website</span>
-                    <span className="font-bold">£3,000+</span>
-                  </div>
-                  <div className="flex justify-between items-center pb-4 border-b border-white/5">
-                    <span className="text-white/60">AI Chat Software</span>
-                    <span className="font-bold">£99/mo</span>
-                  </div>
-                  <div className="flex justify-between items-center pb-4 border-b border-white/5">
-                    <span className="text-white/60">CRM & Inbox</span>
-                    <span className="font-bold">£150/mo</span>
-                  </div>
-                  <div className="flex justify-between items-center pt-2">
-                    <span className="text-accent font-bold">Our System</span>
-                    <span className="text-accent font-bold">£297/mo</span>
-                  </div>
-                </div>
-                <div className="mt-8 p-4 bg-accent/10 rounded-xl border border-accent/20 italic text-center text-accent">
-                  "One new job a month pays for everything."
-                </div>
+                <motion.div
+                  animate={{ scale: [1, 1.02, 1] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <Button variant="primary" className="w-full py-5 text-xl font-bold shadow-[0_0_30px_rgba(244,161,0,0.3)]">
+                    Get Started Now
+                  </Button>
+                </motion.div>
               </div>
-            </div>
-          </GlassCard>
+            </GlassCard>
+          </motion.div>
         </div>
       </div>
     </section>
@@ -553,7 +996,7 @@ const FinalCTA = () => (
         transition={{ delay: 0.1 }}
         className="text-xl text-white/60 mb-12"
       >
-        No setup fees. No contracts. Just more booked jobs.
+        No setup fees. No contracts. Just more enquiries, more bookings, more five star reviews.
       </motion.p>
 
       <motion.div 
@@ -579,7 +1022,7 @@ const FinalCTA = () => (
         className="text-accent font-semibold flex items-center justify-center gap-2"
       >
         <ShieldAlert className="w-5 h-5" />
-        Availability limited by area — claim your patch before a competitor does.
+        Availability limited by area: claim your patch before a competitor does.
       </motion.p>
     </div>
   </section>
@@ -589,7 +1032,6 @@ const Footer = () => (
   <footer className="py-12 border-t border-white/5 bg-dark">
     <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-8">
       <div className="flex items-center gap-2">
-        <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center font-display font-bold text-dark text-lg">OTW</div>
         <span className="font-display font-bold text-lg tracking-tight">Off The Wall <span className="text-accent">Digital</span></span>
       </div>
 
