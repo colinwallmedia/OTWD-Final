@@ -373,7 +373,7 @@ const SolutionIntro = () => (
         viewport={{ once: true }}
         className="text-3xl md:text-5xl font-display font-bold leading-tight"
       >
-        We don't just build websites. We build growth systems that book you more jobs and make you the most trusted and responsive business in your area
+        We build growth systems that make you the most trusted and responsive business in your area
       </motion.p>
     </div>
   </section>
