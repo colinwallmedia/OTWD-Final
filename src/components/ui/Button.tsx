@@ -1,13 +1,15 @@
 import React from 'react';
 
-interface ButtonProps extends React.BaseHTMLAttributes<HTMLElement> {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     children: React.ReactNode;
     variant?: 'primary' | 'secondary' | 'outline';
     size?: 'sm' | 'md' | 'lg';
     className?: string;
     href?: string;
+    target?: string;
     onClick?: (e: React.MouseEvent) => void;
     type?: 'button' | 'submit' | 'reset';
+    disabled?: boolean;
 }
 
 export const Button = ({

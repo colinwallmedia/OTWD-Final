@@ -24,6 +24,12 @@ export default defineConfig(({ mode }) => {
       hmr: process.env.DISABLE_HMR !== 'true',
       port: 3000,
       host: '0.0.0.0',
+      proxy: {
+        '/api': {
+          target: 'http://localhost:4242',
+          changeOrigin: true,
+        },
+      },
     },
     build: {
       outDir: 'dist',

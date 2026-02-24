@@ -12,6 +12,9 @@ import { Footer } from './sections/Footer';
 import { BookCall } from './pages/BookCall';
 import { Legal } from './pages/Legal';
 import { Checkout } from './pages/Checkout';
+import { ThankYou } from './pages/ThankYou';
+import { PaymentCanceled } from './pages/PaymentCanceled';
+import { Upsell } from './pages/Upsell';
 
 export default function App() {
   const [currentPath, setCurrentPath] = useState('/');
@@ -19,25 +22,23 @@ export default function App() {
   // Simple Router Logic
   useEffect(() => {
     const handleLocationChange = () => {
-      const path = window.location.hash.replace('#', '') || '/';
-      if (path.startsWith('/') || path === '') {
-        setCurrentPath(path || '/');
-        window.scrollTo(0, 0);
+      const path = window.location.pathname || '/';
+      setCurrentPath(path);
+      window.scrollTo(0, 0);
 
-        // Hide chat widget on demo pages by adding class to body
-        if (path.startsWith('/demo')) {
-          document.body.classList.add('is-demo-page');
-        } else {
-          document.body.classList.remove('is-demo-page');
-        }
+      // Hide chat widget on demo pages by adding class to body
+      if (path.startsWith('/demo')) {
+        document.body.classList.add('is-demo-page');
+      } else {
+        document.body.classList.remove('is-demo-page');
       }
     };
 
-    window.addEventListener('hashchange', handleLocationChange);
+    window.addEventListener('popstate', handleLocationChange);
     // Handle initial load
     handleLocationChange();
 
-    return () => window.removeEventListener('hashchange', handleLocationChange);
+    return () => window.removeEventListener('popstate', handleLocationChange);
   }, []);
 
   const navigate = (path: string) => {
@@ -48,8 +49,11 @@ export default function App() {
       return;
     }
 
-    // Otherwise update hash which triggers our router
-    window.location.hash = path;
+    // Otherwise update path which triggers our router
+    window.history.pushState({}, '', path);
+    // Manually trigger handleLocationChange because pushState doesn't trigger popstate
+    const navEvent = new PopStateEvent('popstate');
+    window.dispatchEvent(navEvent);
   };
 
   const renderPage = () => {
@@ -58,6 +62,12 @@ export default function App() {
         return <BookCall />;
       case '/checkout':
         return <Checkout />;
+      case '/thank-you':
+        return <ThankYou />;
+      case '/upsell':
+        return <Upsell />;
+      case '/payment-canceled':
+        return <PaymentCanceled />;
       case '/legal':
       case '/privacy':
       case '/terms':
