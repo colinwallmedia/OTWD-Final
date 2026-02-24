@@ -46,6 +46,9 @@ export const Checkout = () => {
 
     const handleCheckout = async () => {
         setIsLoading(true);
+        const params = new URLSearchParams(window.location.search);
+        const affiliateId = params.get('ref') || params.get('aff') || null;
+
         const requestUrl = '/api/create-checkout-session';
         console.log(`Sending request to: ${requestUrl}`);
         try {
@@ -55,7 +58,8 @@ export const Checkout = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    priceId: plans[billingCycle].id
+                    priceId: plans[billingCycle].id,
+                    affiliateId: affiliateId
                 })
             });
 

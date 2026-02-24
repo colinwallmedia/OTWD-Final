@@ -5,7 +5,27 @@ import cors from 'cors';
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+
+const allowedOrigins = [
+    process.env.APP_URL,
+    'https://offthewalldigital.com',
+    'https://www.offthewalldigital.com',
+    'http://localhost:3000',
+    'http://localhost:5173'
+].filter(Boolean);
+
+app.use(cors({
+    origin: function (origin, callback) {
+        // allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            const msg = 'The CORS policy for this site does not ' +
+                'allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    }
+}));
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -15,9 +35,10 @@ app.get('/', (req, res) => {
 
 app.post('/api/create-checkout-session', async (req, res) => {
     try {
-        const { priceId } = req.body;
+        const { priceId, affiliateId } = req.body;
         console.log('--- New Checkout Session Request ---');
         console.log('Price ID:', priceId);
+        console.log('Affiliate ID:', affiliateId);
         console.log('APP_URL:', process.env.APP_URL);
 
         const origin = req.headers.origin || process.env.APP_URL || 'http://localhost:3000';
@@ -31,6 +52,9 @@ app.post('/api/create-checkout-session', async (req, res) => {
                 },
             ],
             mode: 'subscription',
+            metadata: {
+                affiliateId: affiliateId || 'none'
+            },
             success_url: `${origin}/upsell?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${origin}/payment-canceled?canceled=true`,
         });
@@ -44,7 +68,7 @@ app.post('/api/create-checkout-session', async (req, res) => {
 
 app.post('/api/create-upsell-session', async (req, res) => {
     try {
-        const { billingCycle } = req.body;
+        const { billingCycle, affiliateId } = req.body;
         const origin = req.headers.origin || process.env.APP_URL || 'http://localhost:3000';
 
         const priceId = billingCycle === 'annual'
@@ -59,6 +83,9 @@ app.post('/api/create-upsell-session', async (req, res) => {
                 },
             ],
             mode: 'subscription',
+            metadata: {
+                affiliateId: affiliateId || 'none'
+            },
             success_url: `${origin}/thank-you?success=true&upsell=true`,
             cancel_url: `${origin}/thank-you?success=true&upsell=skipped`,
         });

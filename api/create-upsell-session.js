@@ -12,8 +12,22 @@ export default async function handler(req, res) {
         }
 
         const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-        const { billingCycle } = req.body;
-        const origin = req.headers.origin || process.env.APP_URL || 'https://offthewalldigital.com';
+        const { billingCycle, affiliateId } = req.body;
+        const origin = req.headers.origin;
+
+        const allowedOrigins = [
+            process.env.APP_URL,
+            'https://offthewalldigital.com',
+            'https://www.offthewalldigital.com',
+            'http://localhost:3000',
+            'http://localhost:5173'
+        ].filter(Boolean);
+
+        if (origin && !allowedOrigins.includes(origin)) {
+            return res.status(403).json({ error: 'Origin not allowed' });
+        }
+
+        const redirectOrigin = origin || process.env.APP_URL || 'https://offthewalldigital.com';
 
         const priceId = billingCycle === 'annual'
             ? process.env.STRIPE_PRICE_ID_VOICE_ANNUAL
@@ -31,8 +45,11 @@ export default async function handler(req, res) {
                 },
             ],
             mode: 'subscription',
-            success_url: `${origin}/thank-you?success=true&upsell=true`,
-            cancel_url: `${origin}/thank-you?success=true&upsell=skipped`,
+            metadata: {
+                affiliateId: affiliateId || 'none'
+            },
+            success_url: `${redirectOrigin}/thank-you?success=true&upsell=true`,
+            cancel_url: `${redirectOrigin}/thank-you?success=true&upsell=skipped`,
         });
 
         res.status(200).json({ url: session.url });

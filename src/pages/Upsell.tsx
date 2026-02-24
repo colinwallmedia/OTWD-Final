@@ -9,11 +9,17 @@ export const Upsell = () => {
 
     const handleAddVoice = async () => {
         setIsLoading(true);
+        const params = new URLSearchParams(window.location.search);
+        const affiliateId = params.get('ref') || params.get('aff') || null;
+
         try {
             const response = await fetch('/api/create-upsell-session', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ billingCycle: 'monthly' }) // Default to monthly for add-on
+                body: JSON.stringify({
+                    billingCycle: 'monthly',
+                    affiliateId: affiliateId
+                })
             });
 
             const { url } = await response.json();
