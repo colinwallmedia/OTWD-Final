@@ -21,10 +21,23 @@ export const BookCall = () => {
     return (
         <div className="pt-32 pb-20 min-h-screen relative overflow-hidden">
             <div className="container-tight">
-                <SectionHeading
-                    title="Book a demo - See the system in action"
-                    subtitle="Save 4 hours a day. No hard sell, just a plan for your business."
-                />
+                <div className="text-center mb-16">
+                    <motion.h1
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-5xl md:text-7xl font-display font-bold text-white mb-6 tracking-tighter"
+                    >
+                        Book a demo - See the <span className="text-accent italic">system in action</span>
+                    </motion.h1>
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                        className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto"
+                    >
+                        Save 4 hours a day. No hard sell, just a plan for your business.
+                    </motion.p>
+                </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start mt-12">
                     {/* Left: Content */}
@@ -61,8 +74,8 @@ export const BookCall = () => {
                                     <TrendingUp className="w-8 h-8" />
                                 </div>
                                 <div className="space-y-1">
-                                    <div className="text-2xl font-black text-white">£2,375 Recovered</div>
-                                    <div className="text-accent font-bold uppercase tracking-wider text-xs">
+                                    <div className="text-2xl font-bold text-white">£2,375 Recovered</div>
+                                    <div className="text-accent font-bold uppercase tracking-wider text-[10px]">
                                         Avg. Missed Revenue + 23% Enquiry Jump
                                     </div>
                                 </div>
@@ -74,7 +87,7 @@ export const BookCall = () => {
                     <motion.div
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        className="glass overflow-hidden rounded-3xl border border-white/10 shadow-3xl bg-white/[0.02] min-h-[600px] flex items-center justify-center"
+                        className="glass p-1 overflow-hidden rounded-3xl"
                     >
                         <iframe
                             src="https://api.leadconnectorhq.com/widget/booking/IgSO6bWnLnHcqzFPgFb0"
@@ -87,7 +100,7 @@ export const BookCall = () => {
 
                 <div className="mt-20 text-center space-y-4">
                     <p className="text-white/40 text-sm uppercase tracking-widest font-bold">Prefer a direct chat?</p>
-                    <a href="tel:+447883320855" className="inline-flex items-center gap-3 text-3xl font-display font-black text-white hover:text-accent transition-colors">
+                    <a href="tel:+447883320855" className="inline-flex items-center gap-3 text-3xl font-display font-bold text-white hover:text-accent transition-colors">
                         <Phone className="w-8 h-8 text-accent" /> +44 7883 320855
                     </a>
                 </div>
