@@ -2,12 +2,13 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { SectionHeading } from '../components/ui/SectionHeading';
 import { Play, ArrowRight } from 'lucide-react';
+import { Button } from '../components/ui/Button';
 
 interface HowItWorksProps {
-    onOpenDemo: () => void;
+    onNavigate: (path: string) => void;
 }
 
-export const HowItWorks = ({ onOpenDemo }: HowItWorksProps) => {
+export const HowItWorks = ({ onNavigate }: HowItWorksProps) => {
     const steps = [
         { step: "01", title: "We Build Your System", desc: "We set up your complete growth system, inbox, automations, website and review tools, all configured for your trade and your local area." },
         { step: "02", title: "You Review and Approve", desc: "We walk you through everything. You check it, approve it and request any changes before anything goes live." },
@@ -15,7 +16,7 @@ export const HowItWorks = ({ onOpenDemo }: HowItWorksProps) => {
     ];
 
     return (
-        <section id="how-it-works" className="relative overflow-hidden py-24 md:py-32">
+        <section id="how-it-works" className="relative overflow-hidden">
             {/* Background Decorative Element */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-4xl -z-10 opacity-10">
                 <div className="absolute inset-0 bg-accent/20 blur-[120px] rounded-full" />
@@ -58,7 +59,7 @@ export const HowItWorks = ({ onOpenDemo }: HowItWorksProps) => {
                                     <div className="relative mb-8">
                                         <motion.div
                                             animate={{
-                                                boxShadow: ["0 0 20px rgba(var(--accent-color), 0.2)", "0 0 40px rgba(var(--accent-color), 0.4)", "0 0 20px rgba(var(--accent-color), 0.2)"]
+                                                boxShadow: ["0 0 20px rgba(244, 161, 0, 0.2)", "0 0 40px rgba(244, 161, 0, 0.4)", "0 0 20px rgba(244, 161, 0, 0.2)"]
                                             }}
                                             transition={{ duration: 3, repeat: Infinity }}
                                             className="w-16 h-16 bg-accent text-dark rounded-full flex items-center justify-center text-2xl font-display font-bold relative z-10"
@@ -87,16 +88,15 @@ export const HowItWorks = ({ onOpenDemo }: HowItWorksProps) => {
                         transition={{ delay: 0.6 }}
                         className="mt-20 text-center"
                     >
-                        <div className="inline-block glass p-1 rounded-full border border-accent/20">
-                            <button
-                                onClick={onOpenDemo}
-                                className="px-8 py-4 bg-accent text-dark rounded-full font-black flex items-center gap-3 hover:bg-white hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(244,161,0,0.2)] group"
+                        <div className="inline-block">
+                            <Button
+                                variant="primary"
+                                size="lg"
+                                className="px-10 group"
+                                onClick={() => onNavigate('/checkout')}
                             >
-                                <div className="w-8 h-8 rounded-full bg-dark/10 flex items-center justify-center group-hover:bg-dark/20 transition-colors">
-                                    <Play className="w-4 h-4 fill-current ml-0.5" />
-                                </div>
-                                See The Interactive Demo <ArrowRight className="w-5 h-5 ml-2" />
-                            </button>
+                                Get Started Now <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                            </Button>
                         </div>
                     </motion.div>
                 </div>

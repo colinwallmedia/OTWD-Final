@@ -4,7 +4,11 @@ import { Search, MousePointerClick, Zap, Inbox, CheckCircle2, History, Star, Tre
 import { SectionHeading } from '../components/ui/SectionHeading';
 import { Button } from '../components/ui/Button';
 
-export const Flywheel = () => {
+interface FlywheelProps {
+    onNavigate: (path: string) => void;
+}
+
+export const Flywheel = ({ onNavigate }: FlywheelProps) => {
     const [activeStep, setActiveStep] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
 
@@ -85,7 +89,7 @@ export const Flywheel = () => {
     }, [isPaused, steps.length]);
 
     return (
-        <section id="flywheel" className="relative overflow-hidden bg-dark py-24 md:py-32">
+        <section id="solution" className="relative overflow-hidden bg-dark py-24 md:py-32">
             {/* Subtle Background Effects */}
             <div className="absolute inset-0 pointer-events-none opacity-20">
                 {[...Array(6)].map((_, i) => (
@@ -320,15 +324,16 @@ export const Flywheel = () => {
                     className="mt-32 text-center max-w-4xl mx-auto"
                 >
                     <div className="relative z-10 flex flex-col items-center gap-6">
-                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white tracking-tight leading-tight">
-                            Ready to stop the leak?
-                        </h2>
-                        <p className="text-xl md:text-2xl text-white/60 leading-relaxed max-w-2xl mb-8">
-                            One system. Eight steps. Fully automated. Your business growing while you're on the tools.
+                        <p className="text-2xl md:text-3xl text-white/80 leading-relaxed max-w-3xl mb-8 font-display font-bold">
+                            One system. Fully automated. Your business growing while you're on the tools.
                         </p>
-                        <Button variant="primary" size="lg" className="w-full sm:w-auto px-10 text-lg py-4">
-                            Get Started Today <ArrowRight className="w-5 h-5 ml-2" />
+                        <Button variant="primary" size="lg" className="px-10 flex items-center gap-3 group" onClick={() => onNavigate('/checkout')}>
+                            Get Started Now
+                            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform ml-2" />
                         </Button>
+                        <p className="text-accent text-sm font-bold mt-2">
+                            Availability limited by area
+                        </p>
                     </div>
                 </motion.div>
             </div>

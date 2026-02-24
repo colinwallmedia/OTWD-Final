@@ -1,19 +1,42 @@
 import React from 'react';
-import { motion } from 'motion/react';
+import { motion, useScroll, useTransform } from 'motion/react';
 import { Star, ArrowRight } from 'lucide-react';
 import { Button } from '../components/ui/Button';
-import { GridBackground } from '../components/Hero/GridBackground';
 
 interface HeroProps {
     onNavigate: (path: string) => void;
-    onOpenDemo: () => void;
 }
 
-export const Hero = ({ onNavigate, onOpenDemo }: HeroProps) => {
+export const Hero = ({ onNavigate }: HeroProps) => {
+    const sectionRef = React.useRef<HTMLElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: sectionRef,
+        offset: ["start start", "end start"]
+    });
+
+    // Parallax effect: moves background slightly slower than scroll
+    const y = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+    // Fade out background as we scroll past
+    const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
     return (
-        <section className="relative pt-20 pb-20 md:pt-32 md:pb-32 overflow-hidden">
-            {/* 1. Enhanced Animated Background */}
-            <GridBackground />
+        <section ref={sectionRef} className="relative py-24 md:py-32 min-h-screen flex items-center overflow-visible">
+            {/* Sticky Parallax Background Container */}
+            <div className="absolute inset-0 z-0 pointer-events-none [clip-path:inset(0)]">
+                <div className="fixed inset-0 h-full w-full">
+                    <motion.div
+                        style={{ y }}
+                        className="absolute inset-0 w-full h-full"
+                    >
+                        <div
+                            className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-110"
+                            style={{ backgroundImage: 'url(/images/trade-bg-3.jpg)' }}
+                        />
+                    </motion.div>
+                    {/* Dark Overlay for readability - pinned to the fixed container */}
+                    <div className="absolute inset-0 bg-dark/75 backdrop-blur-[1px]" />
+                </div>
+            </div>
 
 
             <div className="container-tight text-center relative z-10">
@@ -43,7 +66,7 @@ export const Hero = ({ onNavigate, onOpenDemo }: HeroProps) => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2, duration: 0.5 }}
-                    className="text-xl md:text-2xl text-white/60 max-w-4xl mx-auto mb-8 leading-relaxed text-balance"
+                    className="text-description max-w-4xl mx-auto mb-8 text-balance"
                 >
                     Every enquiry answered within 60 seconds, quote and book jobs, outrank your competitors so the enquiries come to you first. Automatically.
                 </motion.p>
@@ -53,7 +76,7 @@ export const Hero = ({ onNavigate, onOpenDemo }: HeroProps) => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.4, duration: 0.6 }}
-                    className="text-lg md:text-xl text-white/80 mb-12 mt-12"
+                    className="text-lg md:text-xl text-white/80 mb-12"
                 >
                     No Tech Skill Required - Managed from the palm of your hand
                 </motion.p>
@@ -65,11 +88,11 @@ export const Hero = ({ onNavigate, onOpenDemo }: HeroProps) => {
                     transition={{ delay: 0.8, duration: 0.6 }}
                     className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
                 >
-                    <Button variant="primary" size="lg" className="w-full sm:w-auto" onClick={onOpenDemo}>
-                        See How It Works <ArrowRight className="w-5 h-5" />
+                    <Button variant="primary" size="lg" className="w-full sm:w-auto group" onClick={() => onNavigate('/checkout')}>
+                        Get Started Now <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                     </Button>
-                    <Button variant="outline" size="lg" className="w-full sm:w-auto" onClick={() => onNavigate('/book-call')}>
-                        Book a Free 10-Minute Call
+                    <Button variant="outline" size="lg" className="w-full sm:w-auto" onClick={() => onNavigate('#problem')}>
+                        See More
                     </Button>
                 </motion.div>
 

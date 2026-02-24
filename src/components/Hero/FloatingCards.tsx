@@ -75,7 +75,7 @@ export const FloatingProofCards = () => {
                 <div className="text-xs text-white/80 font-medium mb-1">
                     "Fantastic work, arrived on time!"
                 </div>
-                <div className="text-[10px] text-white/40">— David H., London</div>
+                <div className="text-[10px] text-white/40">David H., London</div>
             </FloatingContainer>
 
             {/* Booking Card */}

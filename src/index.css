@@ -10,6 +10,13 @@
   --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Hide LeadConnector chat widget on demo pages to avoid overlap */
+body.is-demo-page chat-widget,
+body.is-demo-page #lc-chat-layout,
+body.is-demo-page .lc-chat-layout_launcher {
+  display: none !important;
+}
+
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Space Grotesk", sans-serif;
@@ -56,7 +63,11 @@
   }
 
   .container-tight {
-    @apply max-w-7xl mx-auto px-6;
+    @apply max-w-7xl mx-auto px-4 md:px-8;
+  }
+
+  .text-description {
+    @apply text-lg md:text-xl text-white/50 leading-relaxed font-medium;
   }
 }
 

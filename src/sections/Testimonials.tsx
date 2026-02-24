@@ -11,7 +11,7 @@ export const Testimonials = () => {
     ];
 
     return (
-        <section id="testimonials" className="bg-dark/50 py-24 md:py-32">
+        <section id="testimonials" className="bg-dark/50">
             <div className="container-tight">
                 <SectionHeading title="What the Trade is Saying" />
 

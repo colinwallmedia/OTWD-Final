@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ThemeSwitcher } from '../components/ThemeSwitcher';
 import { Button } from '../components/ui/Button';
 
 interface NavProps {
     onNavigate: (path: string) => void;
-    onOpenDemo: () => void;
     isSubpage: boolean;
 }
 
-export const Nav = ({ onNavigate, onOpenDemo, isSubpage }: NavProps) => {
+export const Nav = ({ onNavigate, isSubpage }: NavProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
 
@@ -22,18 +21,13 @@ export const Nav = ({ onNavigate, onOpenDemo, isSubpage }: NavProps) => {
 
     const navLinks = [
         { href: "#problem", label: "The Problem", homeOnly: true },
-        { href: "#flywheel", label: "The System", homeOnly: true },
-        { href: "#features", label: "Features", homeOnly: true },
-        { href: "/demo", label: "Demos", action: onOpenDemo },
+        { href: "#solution", label: "The Solution", homeOnly: true },
         { href: "#pricing", label: "Pricing", homeOnly: true },
+        { href: "#testimonials", label: "Testimonials", homeOnly: true },
     ];
 
-    const handleLinkClick = (e: React.MouseEvent, path: string, action?: () => void) => {
+    const handleLinkClick = (e: React.MouseEvent, path: string) => {
         e.preventDefault();
-        if (action) {
-            action();
-            return;
-        }
 
         if (isSubpage && path.startsWith('#')) {
             onNavigate('/');
@@ -62,7 +56,7 @@ export const Nav = ({ onNavigate, onOpenDemo, isSubpage }: NavProps) => {
                         <a
                             key={link.href}
                             href={link.href}
-                            onClick={(e) => handleLinkClick(e, link.href, link.action)}
+                            onClick={(e) => handleLinkClick(e, link.href)}
                             className="hover:text-accent transition-colors duration-smooth ease-smooth"
                         >
                             {link.label}
@@ -72,7 +66,9 @@ export const Nav = ({ onNavigate, onOpenDemo, isSubpage }: NavProps) => {
 
                 <div className="hidden md:flex items-center gap-4">
                     <ThemeSwitcher />
-                    <Button variant="primary" size="sm" onClick={() => onNavigate('/book-call')}>Book a Call</Button>
+                    <Button variant="primary" size="sm" className="group" onClick={() => onNavigate('/checkout')}>
+                        Get Started Now <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-0.5 transition-transform" />
+                    </Button>
                 </div>
 
                 <div className="md:hidden flex items-center gap-4">
@@ -96,14 +92,14 @@ export const Nav = ({ onNavigate, onOpenDemo, isSubpage }: NavProps) => {
                                 <a
                                     key={link.href}
                                     href={link.href}
-                                    onClick={(e) => handleLinkClick(e, link.href, link.action)}
+                                    onClick={(e) => handleLinkClick(e, link.href)}
                                     className="text-lg text-white/70 hover:text-accent font-bold transition-colors"
                                 >
                                     {link.label}
                                 </a>
                             ))}
-                            <Button variant="primary" className="w-full mt-4" onClick={() => { onNavigate('/book-call'); setIsOpen(false); }}>
-                                Book a Call
+                            <Button variant="primary" className="w-full mt-4 group" onClick={() => { onNavigate('/checkout'); setIsOpen(false); }}>
+                                Get Started Now <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                             </Button>
                         </div>
                     </motion.div>

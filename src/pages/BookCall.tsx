@@ -3,8 +3,21 @@ import { motion } from 'motion/react';
 import { Calendar, Clock, CheckCircle2, Phone } from 'lucide-react';
 import { SectionHeading } from '../components/ui/SectionHeading';
 import { Button } from '../components/ui/Button';
+import { useEffect } from 'react';
 
 export const BookCall = () => {
+    useEffect(() => {
+        const script = document.createElement('script');
+        script.src = "https://api.leadconnectorhq.com/js/form_embed.js";
+        script.type = "text/javascript";
+        script.async = true;
+        document.body.appendChild(script);
+
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, []);
+
     return (
         <div className="pt-32 pb-20 min-h-screen relative overflow-hidden">
             <div className="container-tight">
@@ -55,33 +68,25 @@ export const BookCall = () => {
                         </div>
                     </motion.div>
 
-                    {/* Right: Placeholder for Calendar */}
+                    {/* Right: Calendar Embed */}
                     <motion.div
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        className="glass p-1 rounded-3xl border border-white/10 shadow-3xl bg-white/[0.02]"
+                        className="glass overflow-hidden rounded-3xl border border-white/10 shadow-3xl bg-white/[0.02] min-h-[600px] flex items-center justify-center"
                     >
-                        <div className="bg-dark/40 rounded-[22px] aspect-[4/5] flex flex-col items-center justify-center text-center p-12 space-y-6">
-                            <div className="w-20 h-20 bg-accent/10 rounded-full flex items-center justify-center text-accent animate-pulse">
-                                <Calendar className="w-10 h-10" />
-                            </div>
-                            <div className="space-y-2">
-                                <h4 className="text-2xl font-bold text-white">Scheduling Widget Placeholder</h4>
-                                <p className="text-white/40 max-w-xs mx-auto text-sm italic">
-                                    Your Calendly, TidyCal, or personal booking widget will be embedded here.
-                                </p>
-                            </div>
-                            <Button variant="outline" className="mt-8 border-accent/50 text-accent hover:bg-accent hover:text-dark">
-                                Simulated Booking Link
-                            </Button>
-                        </div>
+                        <iframe
+                            src="https://api.leadconnectorhq.com/widget/booking/IgSO6bWnLnHcqzFPgFb0"
+                            style={{ width: '100%', border: 'none', minHeight: '600px' }}
+                            scrolling="no"
+                            id="IgSO6bWnLnHcqzFPgFb0_1771834553139"
+                        />
                     </motion.div>
                 </div>
 
                 <div className="mt-20 text-center space-y-4">
                     <p className="text-white/40 text-sm uppercase tracking-widest font-bold">Prefer a direct chat?</p>
-                    <a href="tel:0" className="inline-flex items-center gap-3 text-3xl font-display font-black text-white hover:text-accent transition-colors">
-                        <Phone className="w-8 h-8 text-accent" /> 0XXX XXX XXXX
+                    <a href="tel:+447883320855" className="inline-flex items-center gap-3 text-3xl font-display font-black text-white hover:text-accent transition-colors">
+                        <Phone className="w-8 h-8 text-accent" /> +44 7883 320855
                     </a>
                 </div>
             </div>

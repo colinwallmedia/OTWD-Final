@@ -28,7 +28,7 @@ export const FinalCTA = ({ onNavigate }: FinalCTAProps) => (
                 transition={{ delay: 0.1 }}
                 className="text-xl text-white/60 mb-12"
             >
-                No setup fees. No contracts. Just more enquiries, more bookings, more five star reviews.
+                No set-up fees. No contracts. Just more enquiries, more bookings, more five star reviews.
             </motion.p>
 
             <motion.div
@@ -39,10 +39,10 @@ export const FinalCTA = ({ onNavigate }: FinalCTAProps) => (
                 className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
             >
                 <Button variant="primary" size="lg" className="w-full sm:w-auto" onClick={() => onNavigate('/book-call')}>
-                    Book My Free Call <ArrowRight className="w-5 h-5" />
+                    Book a Demo <ArrowRight className="w-5 h-5" />
                 </Button>
-                <Button variant="outline" size="lg" className="w-full sm:w-auto" href="tel:+440000000000">
-                    Call Us Now
+                <Button variant="outline" size="lg" className="w-full sm:w-auto text-white border-white/20 hover:bg-white/5 flex items-center justify-center gap-2 group" onClick={() => onNavigate('/checkout')}>
+                    Get Started Now <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform ml-2" />
                 </Button>
             </motion.div>
 
@@ -51,10 +51,10 @@ export const FinalCTA = ({ onNavigate }: FinalCTAProps) => (
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.4 }}
-                className="text-accent font-semibold flex items-center justify-center gap-2"
+                className="text-accent font-black flex items-center justify-center gap-2"
             >
                 <ShieldAlert className="w-5 h-5" />
-                Availability limited by area: claim your patch before a competitor does.
+                AVAILABILITY LIMITED BY AREA: CLAIM YOUR PATCH BEFORE A COMPETITOR DOES.
             </motion.p>
         </div>
     </section>

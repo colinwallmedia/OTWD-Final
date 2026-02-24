@@ -1,6 +1,6 @@
 import React from 'react';
-import { motion } from 'motion/react';
-import { Search, Star, TrendingUp, ArrowRight, ArrowLeft, RotateCw, MousePointer2, MessageCircle, MessageSquare, Instagram, Mail, Phone } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Search, Star, TrendingUp, ArrowRight, ArrowLeft, RotateCw, MousePointer2, MessageCircle, MessageSquare, Instagram, Mail, Phone, AlertCircle } from 'lucide-react';
 import { SectionHeading } from '../components/ui/SectionHeading';
 import { Button } from '../components/ui/Button';
 
@@ -27,7 +27,7 @@ const WhatsAppMock = ({ contact, messages }: { contact: string, messages: any[] 
                             {msg.text}
                             <div className="text-[10px] text-white/50 text-right mt-1.5 flex justify-end items-center gap-1">
                                 {msg.time}
-                                {msg.isSent && <span className="text-blue-400">✓✓</span>}
+                                {msg.isSent && <span className="text-blue-400">Read</span>}
                             </div>
                         </div>
                     </div>
@@ -48,8 +48,11 @@ const GoogleSearchMock = () => {
             <div className="flex flex-col gap-5">
                 {/* Result 1 */}
                 <div className="flex flex-col gap-1">
-                    <div className="text-blue-400 text-lg hover:underline cursor-pointer font-medium">Mike's Plumbing</div>
-                    <div className="flex items-center gap-1 text-sm text-white/80">
+                    <div className="flex items-center gap-2">
+                        <span className="text-white/40 font-display font-bold">1.</span>
+                        <div className="text-blue-400 text-lg hover:underline cursor-pointer font-medium">Mike's Plumbing</div>
+                    </div>
+                    <div className="flex items-center gap-1 text-sm text-white/80 pl-6">
                         <span className="font-bold">5.0</span>
                         <div className="flex text-accent">
                             <Star className="w-3.5 h-3.5 fill-accent border-0" />
@@ -58,13 +61,16 @@ const GoogleSearchMock = () => {
                             <Star className="w-3.5 h-3.5 fill-accent" />
                             <Star className="w-3.5 h-3.5 fill-accent" />
                         </div>
-                        <span className="text-white/50">(47)</span>
+                        <span className="text-white/50">(154 reviews)</span>
                     </div>
                 </div>
                 {/* Result 2 */}
                 <div className="flex flex-col gap-1">
-                    <div className="text-blue-400 text-lg hover:underline cursor-pointer font-medium">AquaFix Heating</div>
-                    <div className="flex items-center gap-1 text-sm text-white/80">
+                    <div className="flex items-center gap-2">
+                        <span className="text-white/40 font-display font-bold">2.</span>
+                        <div className="text-blue-400 text-lg hover:underline cursor-pointer font-medium">AquaFix Heating</div>
+                    </div>
+                    <div className="flex items-center gap-1 text-sm text-white/80 pl-6">
                         <span className="font-bold">5.0</span>
                         <div className="flex text-accent">
                             <Star className="w-3.5 h-3.5 fill-accent" />
@@ -73,22 +79,64 @@ const GoogleSearchMock = () => {
                             <Star className="w-3.5 h-3.5 fill-accent" />
                             <Star className="w-3.5 h-3.5 fill-accent" />
                         </div>
-                        <span className="text-white/50">(31)</span>
+                        <span className="text-white/50">(89 reviews)</span>
                     </div>
                 </div>
-                {/* Greyed out user */}
-                <div className="flex flex-col gap-1 opacity-20 blur-[1px] grayscale">
-                    <div className="text-blue-400 text-lg">Your Business Name</div>
-                    <div className="flex items-center gap-1 text-sm text-white/80">
-                        <span className="font-bold">3.2</span>
+                {/* Result 3 */}
+                <div className="flex flex-col gap-1">
+                    <div className="flex items-center gap-2">
+                        <span className="text-white/40 font-display font-bold">3.</span>
+                        <div className="text-blue-400 text-lg hover:underline cursor-pointer font-medium">Rapid Response Drains</div>
+                    </div>
+                    <div className="flex items-center gap-1 text-sm text-white/80 pl-6">
+                        <span className="font-bold">4.9</span>
                         <div className="flex text-accent">
                             <Star className="w-3.5 h-3.5 fill-accent" />
                             <Star className="w-3.5 h-3.5 fill-accent" />
                             <Star className="w-3.5 h-3.5 fill-accent" />
-                            <Star className="w-3.5 h-3.5 text-white/30" />
-                            <Star className="w-3.5 h-3.5 text-white/30" />
+                            <Star className="w-3.5 h-3.5 fill-accent" />
+                            <Star className="w-3.5 h-3.5 fill-accent" />
                         </div>
-                        <span className="text-white/50">(2)</span>
+                        <span className="text-white/50">(42 reviews)</span>
+                    </div>
+                </div>
+
+                <div className="h-px bg-white/5 my-1" />
+
+                {/* Your Business at 56 */}
+                <div className="flex flex-col gap-1 relative py-2">
+                    <div className="flex items-center gap-2">
+                        <span className="text-white/40 font-display font-bold">56.</span>
+                        <div className="relative">
+                            {/* Hand-drawn marker circle around the name */}
+                            <div className="absolute -inset-x-8 -inset-y-4 pointer-events-none z-20">
+                                <svg viewBox="0 0 240 60" fill="none" className="w-full h-full preserve-3d overflow-visible">
+                                    <motion.path
+                                        d="M5,30 C5,5 235,5 235,30 C235,55 5,55 8,35"
+                                        stroke="#ef4444"
+                                        strokeWidth="3.5"
+                                        strokeLinecap="round"
+                                        initial={{ pathLength: 0, opacity: 0 }}
+                                        whileInView={{ pathLength: 1, opacity: 0.9 }}
+                                        viewport={{ once: true }}
+                                        transition={{ duration: 1, ease: "easeInOut", delay: 0.3 }}
+                                        style={{ filter: 'drop-shadow(0 0 4px rgba(239, 68, 68, 0.4))' }}
+                                    />
+                                </svg>
+                            </div>
+                            <div className="text-blue-400 text-lg hover:underline cursor-pointer font-medium">Your Plumbing Business</div>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-1 text-sm text-white/80 pl-8">
+                        <span className="font-bold">5.0</span>
+                        <div className="flex text-accent">
+                            <Star className="w-3.5 h-3.5 fill-accent" />
+                            <Star className="w-3.5 h-3.5 fill-accent" />
+                            <Star className="w-3.5 h-3.5 fill-accent" />
+                            <Star className="w-3.5 h-3.5 fill-accent" />
+                            <Star className="w-3.5 h-3.5 fill-accent" />
+                        </div>
+                        <span className="text-white/50">(1 review) • 3 years ago</span>
                     </div>
                 </div>
             </div>
@@ -113,18 +161,23 @@ const GoogleReviewMock = () => {
                             <Star className="w-3.5 h-3.5 text-white/20" />
                             <Star className="w-3.5 h-3.5 text-white/20" />
                         </div>
-                        <span className="text-xs text-white/50">3 weeks ago</span>
+                        <span className="text-xs text-white/50">Posted 3 weeks ago</span>
                     </div>
                     <p className="text-white/80 text-sm leading-relaxed">
                         Turned up late, no communication. Wouldn't recommend.
                     </p>
 
-                    <div className="mt-4 bg-[#303134] p-3 rounded-lg border border-red-500/20 flex flex-col gap-2 relative overflow-hidden group">
+                    <div className="mt-4 bg-[#303134] p-3 rounded-lg border border-red-500/30 flex flex-col gap-2 relative overflow-hidden group">
                         <div className="absolute inset-0 bg-red-500/5 group-hover:bg-red-500/10 transition-colors pointer-events-none" />
-                        <div className="text-xs text-white/40 uppercase tracking-widest font-semibold flex items-center gap-2">
-                            Owner Response
+                        <div className="flex items-center justify-between">
+                            <div className="text-xs text-white/40 uppercase tracking-widest font-semibold flex items-center gap-2">
+                                Owner Response
+                            </div>
+                            <div className="px-2 py-0.5 rounded-full bg-red-500/10 border border-red-500/40 text-[10px] text-red-500 font-bold uppercase tracking-wider">
+                                Unanswered
+                            </div>
                         </div>
-                        <div className="text-sm text-white/50 italic">
+                        <div className="text-sm text-white/90 font-medium italic">
                             No reply provided.
                         </div>
                     </div>
@@ -145,8 +198,12 @@ const BrowserMock = () => {
                 </div>
                 <ArrowRight className="w-4 h-4 text-white/30" />
                 <RotateCw className="w-4 h-4 text-white/50" />
-                <div className="flex-1 bg-[#202124] rounded-md h-7 flex items-center px-3 text-xs text-white/50 truncate">
-                    http://unsecured-domain.com
+                <div className="flex-1 bg-[#202124] rounded-md h-7 flex items-center px-3 gap-2 text-xs truncate">
+                    <div className="flex items-center gap-1 text-red-500 font-medium shrink-0">
+                        <AlertCircle className="w-3 h-3" />
+                        <span>Not secure</span>
+                    </div>
+                    <span className="text-white/30">unsecured-domain.com</span>
                 </div>
             </div>
             {/* Cluttered outdated page content */}
@@ -264,40 +321,113 @@ const NotificationMock = () => {
     );
 };
 
-const StoryScene = ({ mock, title, caption, subline, impactExplainer, loss, index }: { mock: React.ReactNode, title: React.ReactNode, caption: React.ReactNode, subline?: React.ReactNode, impactExplainer?: React.ReactNode, loss?: string, index: number }) => {
+const SCENES = [
+    {
+        mock: <NotificationMock />,
+        title: "The Inbox Spiral",
+        caption: "It's 7am. You haven't even got your boots on. One of those is an £850 job. By the time you find it, they've already moved on.",
+        subline: "You didn't start a trade business to spend your mornings buried in WhatsApp messages, emails, and missed calls. Every disorganised channel is another hole in your bucket where good jobs quietly slip away.",
+        impactExplainer: "Losing out on just 1 job a week can easily amount to over £1800 (avg job £450)",
+        loss: "Lost: £1800"
+    },
+    {
+        mock: <GoogleSearchMock />,
+        title: "The Invisible Tradesperson",
+        caption: "You were 10 minutes away. Dave didn't know you existed.",
+        subline: "He went with a competitor who does worse work but has a better Google ranking. Being the best kept secret in town does not pay the bills, it just hands easy money to the businesses that actually show up when customers search.",
+        impactExplainer: "Missing 2 jobs a week because you're invisible online easily amounts to £3600 (avg job £450)",
+        loss: "Lost: £3600"
+    },
+    {
+        mock: <BrowserMock />,
+        title: "Judged in 3 Seconds",
+        caption: "They did not call. They did not enquire. They just left. You will never know they were even there.",
+        subline: "Your website is your digital shopfront. In 2026, customers decide in 3 seconds whether you are a professional or a cowboy. If your site is slow, broken or looks like it was built in 1994, they will not call. They will simply move on to the next name on Google.",
+        impactExplainer: "A bad website bounces good customers. Losing 1 job a week costs you £1800 (avg job £450)",
+        loss: "Lost: £1800"
+    },
+    {
+        mock: <GoogleReviewMock />,
+        title: "The Silent Reputation Killer",
+        caption: "You never saw it. 23 potential customers did before you even finished your morning coffee.",
+        subline: "One unfair review from a nightmare customer sits at the top of your profile, poisoning your reputation while you are busy working. Because you are too busy to respond, a hundred happy customers stay quiet, leaving a single local troll to decide whether you get booked or not.",
+        impactExplainer: "One bad review can deter dozens of local customers. That reputational damage easily costs £2000 a month in lost bookings.",
+        loss: "Lost: £2000"
+    },
+    {
+        mock: (
+            <WhatsAppMock
+                contact="Sarah M."
+                messages={[
+                    { text: "Hi, can I get a quote for a new bathroom? Looking to start ASAP.", time: "5:47 pm", isSent: false, timeLabel: "YESTERDAY" },
+                    { text: "Sorry, was tied up on a job all day. How can I help?", time: "6:27 pm", isSent: true, timeLabel: "TODAY" },
+                    { text: "No worries, I found someone else. Thanks anyway.", time: "6:29 pm", isSent: false }
+                ]}
+            />
+        ),
+        title: "Buried in the Job",
+        caption: "You were buried in a job yesterday. You finally saw the message today. By then, the job was already gone.",
+        subline: "Modern customers expect Amazon-level speed. While you were elbows deep in work, they moved on to the next number on Google. In the digital age, speed is the only loyalty that matters. If you are not the first to reply, you are simply the last to know.",
+        impactExplainer: "Being too slow to reply costs you 1 job a week, easily amounting to £1800 (avg job £450)",
+        loss: "Lost: £1800"
+    },
+    {
+        mock: (
+            <WhatsAppMock
+                contact="Tom B."
+                messages={[
+                    { text: "Hi Tom, just sent that quote over for the extension. Let me know if you have any questions.", time: "4:30 pm", isSent: true, timeLabel: "2 WEEKS AGO" },
+                    { text: "Thanks, received. Need to think about it and speak to the wife.", time: "2:14 pm", isSent: false },
+                    { text: "Went with someone else in the end. We hadn't heard from you so assumed you were too busy for the work. Sorry mate.", time: "9:05 am", isSent: false, timeLabel: "YESTERDAY" }
+                ]}
+            />
+        ),
+        title: "Working for Free",
+        caption: "You drove out, measured up and priced it. Then you let it slip through your fingers.",
+        subline: "You did the hard work, but you were too busy to follow up. While your perfectly good quote sat buried in their inbox, a competitor who was more organised swooped in and took the job. One automated follow-up text would have won it. Instead, you just spent your evening working for free.",
+        impactExplainer: "Forgetting to follow up on high-value quotes costs you 1-2 jobs a month. That is up to £2400 left on the table.",
+        loss: "Lost: £2400"
+    },
+    {
+        mock: (
+            <WhatsAppMock
+                contact="Dave"
+                messages={[
+                    { text: "Invoice sent.", time: "4:00 pm", isSent: true, timeLabel: "3 WEEKS AGO" },
+                    { text: "Hi Dave, just checking you received the invoice?", time: "9:30 am", isSent: true, timeLabel: "2 WEEKS AGO" },
+                    { text: "Yeah sorry mate, been busy, will sort it tonight.", time: "11:15 am", isSent: false },
+                    { text: "Hi Dave, invoice is still outstanding. Can you please confirm payment?", time: "5:15 pm", isSent: true, timeLabel: "YESTERDAY" }
+                ]}
+            />
+        ),
+        title: "The Unpaid Debt Collector",
+        caption: "You did the work perfectly. Now you have to beg to get paid.",
+        subline: "You did not start a business to play debt collector. The awkward texts, the lost Saturday mornings and the constant cash flow anxiety are draining your energy. You are essentially working for free until that money hits your account. Every minute spent chasing an old invoice is a minute you could be earning on a new job or spending with your family.",
+        impactExplainer: "Chasing invoices wastes 4 hours of your time every single week. That is 16 hours a month you could be earning on the tools or spending at home.",
+        loss: "Lost: 16 Hours Admin"
+    }
+];
+
+const StoryScene = ({ mock, title, caption, subline, impactExplainer, loss, isActive }: { mock: React.ReactNode, title: React.ReactNode, caption: React.ReactNode, subline?: React.ReactNode, impactExplainer?: React.ReactNode, loss?: string, isActive: boolean }) => {
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.7 }}
-            className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16 max-w-5xl mx-auto py-16 lg:py-24 border-b border-white/5 last:border-0"
-        >
-            <div className={`w-full lg:w-1/2 ${index % 2 !== 0 ? 'lg:order-2' : ''}`}>
-                <div className="relative">
-                    {/* Glow effect behind mock */}
-                    <div className="absolute inset-0 bg-accent/10 blur-[60px] rounded-full -z-10" />
-                    {mock}
-                </div>
-            </div>
+        <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16 max-w-5xl mx-auto py-8 lg:py-12 h-full">
             <div className="w-full lg:w-1/2 flex flex-col gap-4 text-center lg:text-left">
                 <div className="relative inline-block mx-auto lg:mx-0 w-fit">
-                    <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-2 relative z-10">
+                    <h3 className="text-2xl md:text-3xl font-display font-bold text-white mb-2 relative z-10">
                         {title}
-                    </h2>
+                    </h3>
                     <motion.div
                         className="absolute -bottom-1 left-0 h-1 bg-accent/80 rounded-full z-0"
                         initial={{ width: 0, opacity: 0 }}
-                        whileInView={{ width: '100%', opacity: 1 }}
-                        viewport={{ once: true, margin: "-100px" }}
+                        animate={isActive ? { width: '100%', opacity: 1 } : { width: 0, opacity: 0 }}
                         transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
                     />
                 </div>
-                <h3 className="text-2xl md:text-3xl font-display font-medium leading-tight text-white/90 tracking-tight mt-2">
+                <p className="text-xl md:text-2xl font-display font-medium leading-tight text-white/90 tracking-tight mt-2">
                     {caption}
-                </h3>
+                </p>
                 {subline && (
-                    <p className="text-lg text-white/60 leading-relaxed mt-2">
+                    <p className="text-white/60 leading-relaxed mt-2">
                         {subline}
                     </p>
                 )}
@@ -313,19 +443,47 @@ const StoryScene = ({ mock, title, caption, subline, impactExplainer, loss, inde
                     </div>
                 )}
             </div>
-        </motion.div>
+            <div className="w-full lg:w-1/2">
+                <div className="relative">
+                    {/* Glow effect behind mock */}
+                    <div className="absolute inset-0 bg-accent/10 blur-[60px] rounded-full -z-10" />
+                    {mock}
+                </div>
+            </div>
+        </div>
     );
 };
 
-export const Problem = () => {
+interface ProblemProps {
+    onNavigate: (path: string) => void;
+}
+
+export const Problem = ({ onNavigate }: ProblemProps) => {
+    const [activeIndex, setActiveIndex] = React.useState(0);
+    const [isPaused, setIsPaused] = React.useState(false);
+
+    const nextScene = React.useCallback(() => {
+        setActiveIndex((prev) => (prev + 1) % SCENES.length);
+    }, []);
+
+    const prevScene = React.useCallback(() => {
+        setActiveIndex((prev) => (prev - 1 + SCENES.length) % SCENES.length);
+    }, []);
+
+    React.useEffect(() => {
+        if (isPaused) return;
+        const interval = setInterval(nextScene, 30000);
+        return () => clearInterval(interval);
+    }, [isPaused, nextScene]);
+
     return (
-        <section id="problem" className="bg-dark py-24 md:py-32">
-            <div className="container-tight">
+        <section id="problem" className="overflow-hidden">
+            <div className="container-tight relative">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-center max-w-3xl mx-auto mb-16"
+                    className="text-center max-w-3xl mx-auto mb-6"
                 >
                     <SectionHeading
                         title={<>Your Business is a <span className="text-accent">Leaky Bucket</span></>}
@@ -333,109 +491,67 @@ export const Problem = () => {
                     />
                 </motion.div>
 
-                <div className="flex flex-col mt-4">
-                    {/* Scene 1: The Inbox Spiral (Inbox Chaos) */}
-                    <StoryScene
-                        index={0}
-                        mock={<NotificationMock />}
-                        title="The Inbox Spiral"
-                        caption="It's 7am. You haven't even got your boots on. One of those is an £850 job. By the time you find it, they've already moved on."
-                        subline="You didn't start a trade business to spend your mornings buried in WhatsApp messages, emails, and missed calls. Every disorganised channel is another hole in your bucket where good jobs quietly slip away."
-                        impactExplainer="Losing out on just 1 job a week can easily amount to over £1800 (avg job £450)"
-                        loss="Lost: £1800"
-                    />
+                <div
+                    className="relative min-h-[700px] lg:min-h-[600px] group"
+                    onMouseEnter={() => setIsPaused(true)}
+                    onMouseLeave={() => setIsPaused(false)}
+                >
+                    <div className="relative z-10">
+                        <div className="pt-8">
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={activeIndex}
+                                    initial={{ opacity: 0, x: 50 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -50 }}
+                                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                                >
+                                    <StoryScene
+                                        {...SCENES[activeIndex]}
+                                        isActive={true}
+                                    />
+                                </motion.div>
+                            </AnimatePresence>
+                        </div>
 
-                    {/* Scene 2: The Google Search (Lost Leads) */}
-                    <StoryScene
-                        index={1}
-                        mock={<GoogleSearchMock />}
-                        title="The Invisible Tradesperson"
-                        caption="You were 10 minutes away. Dave didn't know you existed."
-                        subline="He went with a competitor who does worse work but has a better Google ranking. Being the best kept secret in town does not pay the bills, it just hands easy money to the businesses that actually show up when customers search."
-                        impactExplainer="Missing 2 jobs a week because you're invisible online easily amounts to £3600 (avg job £450)"
-                        loss="Lost: £3600"
-                    />
+                        {/* Manual Controls Below */}
+                        <div className="flex flex-col items-center gap-6 mt-6 mb-8">
+                            <div className="flex items-center gap-6">
+                                <button
+                                    onClick={(e) => { e.preventDefault(); prevScene(); }}
+                                    className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-accent hover:text-dark transition-all duration-300 hover:scale-110 active:scale-95 text-white"
+                                    aria-label="Previous scenario"
+                                >
+                                    <ArrowLeft className="w-4 h-4" />
+                                </button>
 
-                    {/* Scene 3: The 3-Second Bounce (Weak Website) */}
-                    <StoryScene
-                        index={2}
-                        mock={<BrowserMock />}
-                        title="The 3-Second Bounce"
-                        caption="They didn't call. They didn't enquire. They just left. You'll never know they were even there."
-                        subline="Your website is your shopfront. In 2026, customers decide in 3 seconds whether to trust you. No real photos of your work, no visible reviews, no easy way to contact you and they're gone."
-                        impactExplainer="A bad website bounces good customers. Losing 1 job a week costs you £1800 (avg job £450)"
-                        loss="Lost: £1800"
-                    />
+                                <div className="flex gap-2">
+                                    {SCENES.map((_, i) => (
+                                        <button
+                                            key={i}
+                                            onClick={() => setActiveIndex(i)}
+                                            className={`h-1.5 rounded-full transition-all duration-500 ${activeIndex === i ? 'w-8 bg-accent' : 'w-2 bg-white/10 hover:bg-white/20'}`}
+                                            aria-label={`Go to scenario ${i + 1}`}
+                                        />
+                                    ))}
+                                </div>
 
-                    {/* Scene 4: The Review Ambush (Bad Reviews) */}
-                    <StoryScene
-                        index={3}
-                        mock={<GoogleReviewMock />}
-                        title="The Review Ambush"
-                        caption="You never saw it. 23 people did before you did."
-                        subline="One unfair review from a nightmare customer sits at the top of your profile, poisoning your reputation while you are busy working. A hundred happy customers stay quiet, leaving the local troll to ruin your bookings."
-                        impactExplainer="One bad review can deter dozens of local customers. That reputational damage easily costs £2000 a month in lost bookings."
-                        loss="Lost: £2000"
-                    />
+                                <button
+                                    onClick={(e) => { e.preventDefault(); nextScene(); }}
+                                    className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-accent hover:text-dark transition-all duration-300 hover:scale-110 active:scale-95 text-white"
+                                    aria-label="Next scenario"
+                                >
+                                    <ArrowRight className="w-4 h-4" />
+                                </button>
+                            </div>
 
-                    {/* Scene 5: The WhatsApp Ghost (Missed Enquiries) */}
-                    <StoryScene
-                        index={4}
-                        mock={
-                            <WhatsAppMock
-                                contact="Sarah M."
-                                messages={[
-                                    { text: "Hi, can I get a quote for a new bathroom? Looking to start ASAP", time: "5:47 pm", isSent: false, timeLabel: "Today" },
-                                    { text: "No worries, found someone else 👍", time: "8:12 pm", isSent: false }
-                                ]}
-                            />
-                        }
-                        title="The WhatsApp Ghost"
-                        caption="You were on a job. You didn't see it until 9pm. Job gone."
-                        subline="Customers expect Amazon-level speed. While you were elbows deep in a job, they moved on to the next number on Google. Speed is the new loyalty, and if you are not the first to reply, you are the last to know."
-                        impactExplainer="Being too slow to reply costs you 1 job a week, easily amounting to £1800 (avg job £450)"
-                        loss="Lost: £1800"
-                    />
-
-                    {/* Scene 6: The Follow-Up That Never Came (Zero Follow-Up) */}
-                    <StoryScene
-                        index={5}
-                        mock={
-                            <WhatsAppMock
-                                contact="Tom B."
-                                messages={[
-                                    { text: "Thanks for the quote, need to think about it", time: "2:14 pm", isSent: false, timeLabel: "2 weeks ago" },
-                                    { text: "Went with someone else in the end, sorry mate", time: "9:05 am", isSent: false, timeLabel: "Yesterday" }
-                                ]}
-                            />
-                        }
-                        title="The Quote That Went Cold"
-                        caption="One automated follow-up text would have won it. It never sent."
-                        subline="You drove out, measured up, priced it out, and sent it over. Then... silence. You were too busy to follow up, and a competitor swooped in while your perfectly good quote sat buried in their inbox."
-                        impactExplainer="Forgetting to follow up on high-value quotes costs you 1-2 jobs a month. That's up to £2400 left on the table."
-                        loss="Lost: £2400"
-                    />
-
-                    {/* Scene 7: The Invoice Black Hole (Admin / Time) */}
-                    <StoryScene
-                        index={6}
-                        mock={
-                            <WhatsAppMock
-                                contact="Dave"
-                                messages={[
-                                    { text: "Invoice sent ✓", time: "4:00 pm", isSent: true, timeLabel: "3 weeks ago" },
-                                    { text: "Just checking you received the invoice?", time: "9:30 am", isSent: true, timeLabel: "2 weeks ago" },
-                                    { text: "Yeah sorry mate, been busy, will sort it", time: "11:15 am", isSent: false },
-                                    { text: "Hi Dave, invoice still outstanding...", time: "5:15 pm", isSent: true, timeLabel: "Yesterday" }
-                                ]}
-                            />
-                        }
-                        title="The Invoice Black Hole"
-                        caption="45 minutes chasing money you already earned. Every. Single. Month."
-                        subline="You did the work perfectly, but now you have to play debt collector. The awkward texts, the lost Saturday mornings, the cash flow anxiety. You are working for free until that money actually hits your bank account."
-                        impactExplainer="Chasing invoices wastes 4 hours of your time every single week. That's 16 hours a month you could be earning on the tools or spending at home."
-                        loss="Lost: 16 Hours Admin"
-                    />
+                            <div className="text-white/30 text-sm font-medium uppercase tracking-widest flex items-center gap-3">
+                                <span className="w-8 h-px bg-white/10" />
+                                Scenario {activeIndex + 1} of {SCENES.length}
+                                <span className="w-8 h-px bg-white/10" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Bottom CTA Block */}
@@ -446,19 +562,28 @@ export const Problem = () => {
                     className="mt-24 text-center max-w-3xl mx-auto"
                 >
                     <div className="flex flex-col items-center gap-6">
-                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white tracking-tight">
-                            That's <span className="text-accent underline decoration-2 underline-offset-8">£13,400</span> gone. This month alone.
+                        <h2 className="text-balance">
+                            That's <span className="relative inline-block">
+                                <span className="text-accent">£13,400</span>
+                                <motion.div
+                                    initial={{ width: 0 }}
+                                    whileInView={{ width: "100%" }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
+                                    className="absolute -bottom-2 left-0 h-1 bg-accent rounded-full"
+                                />
+                            </span> gone. This month alone.
                         </h2>
-                        <p className="text-xl md:text-2xl text-white/50 font-medium mb-4">
+                        <p className="text-description mb-4">
                             And you didn't know about any of it.
                         </p>
-                        <Button variant="primary" size="lg" className="mt-4 px-10" href="#flywheel">
+                        <Button variant="primary" size="lg" className="mt-4 px-10" onClick={() => onNavigate('#solution')}>
                             See The Solution <ArrowRight className="w-5 h-5 ml-2" />
                         </Button>
                     </div>
                 </motion.div>
-
             </div>
         </section>
     );
 };
+

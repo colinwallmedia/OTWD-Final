@@ -3,33 +3,33 @@ import { Nav } from './sections/Nav';
 import { Hero } from './sections/Hero';
 import { Problem } from './sections/Problem';
 import { Flywheel } from './sections/Flywheel';
-import { Features } from './sections/Features';
-import { HowItWorks } from './sections/HowItWorks';
+import { GrowthPillars } from './sections/GrowthPillars';
 import { Pricing } from './sections/Pricing';
 import { Testimonials } from './sections/Testimonials';
 import { FinalCTA } from './sections/FinalCTA';
+import { HowItWorks } from './sections/HowItWorks';
 import { Footer } from './sections/Footer';
 import { BookCall } from './pages/BookCall';
 import { Legal } from './pages/Legal';
-import { LeadCaptureDemo } from './pages/demos/LeadCapture';
-import { AIAgentDemo } from './pages/demos/AIAgent';
-import { ReviewEngineDemo } from './pages/demos/ReviewEngine';
-import { DemoPopup } from './components/DemoPopup';
+import { Checkout } from './pages/Checkout';
 
 export default function App() {
   const [currentPath, setCurrentPath] = useState('/');
-  const [isDemoPopupOpen, setIsDemoPopupOpen] = useState(false);
 
   // Simple Router Logic
   useEffect(() => {
     const handleLocationChange = () => {
-      // We'll use a simple path state, but since we're in a single page app without a real router,
-      // we'll handle internal navigation via state. We also check for hash-style navigation.
       const path = window.location.hash.replace('#', '') || '/';
-      // Only update if it looks like a real path and not a section anchor
       if (path.startsWith('/') || path === '') {
         setCurrentPath(path || '/');
         window.scrollTo(0, 0);
+
+        // Hide chat widget on demo pages by adding class to body
+        if (path.startsWith('/demo')) {
+          document.body.classList.add('is-demo-page');
+        } else {
+          document.body.classList.remove('is-demo-page');
+        }
       }
     };
 
@@ -56,29 +56,22 @@ export default function App() {
     switch (currentPath) {
       case '/book-call':
         return <BookCall />;
+      case '/checkout':
+        return <Checkout />;
       case '/legal':
       case '/privacy':
       case '/terms':
         return <Legal />;
-      case '/demo/lead-capture':
-        return <LeadCaptureDemo />;
-      case '/demo/ai-agent':
-        return <AIAgentDemo />;
-      case '/demo/review-engine':
-        return <ReviewEngineDemo />;
       default:
         return (
           <>
-            <Hero
-              onNavigate={navigate}
-              onOpenDemo={() => setIsDemoPopupOpen(true)}
-            />
-            <Problem />
-            <Flywheel />
-            <Features />
-            <HowItWorks onOpenDemo={() => setIsDemoPopupOpen(true)} />
+            <Hero onNavigate={navigate} />
+            <Problem onNavigate={navigate} />
+            <Flywheel onNavigate={navigate} />
+            <GrowthPillars onNavigate={navigate} />
             <Pricing onNavigate={navigate} />
             <Testimonials />
+            <HowItWorks onNavigate={navigate} />
             <FinalCTA onNavigate={navigate} />
           </>
         );
@@ -89,7 +82,6 @@ export default function App() {
     <div className="min-h-screen bg-dark text-white selection:bg-accent selection:text-dark overflow-x-hidden">
       <Nav
         onNavigate={navigate}
-        onOpenDemo={() => setIsDemoPopupOpen(true)}
         isSubpage={currentPath !== '/'}
       />
 
@@ -98,12 +90,6 @@ export default function App() {
       </main>
 
       <Footer onNavigate={navigate} />
-
-      <DemoPopup
-        isOpen={isDemoPopupOpen}
-        onClose={() => setIsDemoPopupOpen(false)}
-        onNavigate={navigate}
-      />
     </div>
   );
 }

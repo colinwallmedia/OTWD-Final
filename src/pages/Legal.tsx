@@ -22,7 +22,7 @@ export const Legal = () => {
             title: "Privacy Policy",
             lastUpdated: "Last updated: February 22, 2026",
             paragraphs: [
-                "Your privacy is critical. We only collect data that is necessary for the system to function—such as customer enquiries, contact details, and calendar availability.",
+                "Your privacy is critical. We only collect data that is necessary for the system to function: such as customer enquiries, contact details, and calendar availability.",
                 "Data Usage: Lead information captured by your website or AI agent is used strictly for your business operations. We never sell your data to third parties.",
                 "Data Storage: All customer data is stored in secure, encrypted environments compliant with UK data protection standards.",
                 "AI Interactions: AI agent transcripts are stored for quality control and to help the system better understand your business needs over time."
