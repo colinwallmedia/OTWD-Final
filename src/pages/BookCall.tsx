@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Calendar, Clock, CheckCircle2, Phone } from 'lucide-react';
+import { Calendar, Clock, CheckCircle2, Phone, TrendingUp } from 'lucide-react';
 import { SectionHeading } from '../components/ui/SectionHeading';
 import { Button } from '../components/ui/Button';
 import { useEffect } from 'react';
@@ -22,8 +22,8 @@ export const BookCall = () => {
         <div className="pt-32 pb-20 min-h-screen relative overflow-hidden">
             <div className="container-tight">
                 <SectionHeading
-                    title="Let's Build Your Growth Engine"
-                    subtitle="15 minutes that could save you 4 hours a day. No hard sell, just a plan for your business."
+                    title="Book a demo - See the system in action"
+                    subtitle="Save 4 hours a day. No hard sell, just a plan for your business."
                 />
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start mt-12">
@@ -58,11 +58,13 @@ export const BookCall = () => {
                         <div className="glass p-8 rounded-3xl border border-accent/20 bg-accent/5 relative overflow-hidden">
                             <div className="relative z-10 flex gap-6 items-center">
                                 <div className="w-16 h-16 rounded-2xl bg-accent flex items-center justify-center text-dark">
-                                    <Clock className="w-8 h-8" />
+                                    <TrendingUp className="w-8 h-8" />
                                 </div>
                                 <div className="space-y-1">
-                                    <div className="text-2xl font-black text-white">4 Hours Saved</div>
-                                    <div className="text-accent font-bold uppercase tracking-wider text-xs">Per Day. Average Result.</div>
+                                    <div className="text-2xl font-black text-white">£2,375 Recovered</div>
+                                    <div className="text-accent font-bold uppercase tracking-wider text-xs">
+                                        Avg. Missed Revenue + 23% Enquiry Jump
+                                    </div>
                                 </div>
                             </div>
                         </div>
