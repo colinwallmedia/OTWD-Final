@@ -91,8 +91,8 @@ export const Hero = ({ onNavigate }: HeroProps) => {
                     <Button variant="primary" size="lg" className="w-full sm:w-auto group" onClick={() => onNavigate('/checkout')}>
                         Get Started Now <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                     </Button>
-                    <Button variant="outline" size="lg" className="w-full sm:w-auto" onClick={() => onNavigate('#problem')}>
-                        See More
+                    <Button variant="outline" size="lg" className="w-full sm:w-auto" onClick={() => onNavigate('/book-call')}>
+                        Book a Demo
                     </Button>
                 </motion.div>
 

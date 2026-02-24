@@ -21,7 +21,7 @@ export const Footer = ({ onNavigate }: FooterProps) => (
             <div className="flex items-center gap-6 text-white/40 text-sm font-medium">
                 <button onClick={() => onNavigate('/privacy')} className="hover:text-accent transition-colors duration-smooth ease-smooth">Privacy Policy</button>
                 <button onClick={() => onNavigate('/terms')} className="hover:text-accent transition-colors duration-smooth ease-smooth">Terms of Service</button>
-                <button onClick={() => onNavigate('/checkout')} className="hover:text-accent transition-colors duration-smooth ease-smooth">Get Started Now</button>
+                <button onClick={() => onNavigate('/book-call')} className="hover:text-accent transition-colors duration-smooth ease-smooth">Book a demo</button>
             </div>
         </div>
     </footer>
