@@ -6,6 +6,36 @@ import cors from 'cors';
 const app = express();
 app.use(express.json());
 
+// Simple In-Memory Rate Limiter
+const requestCounts = new Map();
+const RATE_LIMIT_WINDOW = 15 * 60 * 1000; // 15 minutes
+const MAX_REQUESTS = 100;
+
+const rateLimiter = (req, res, next) => {
+    const ip = req.ip;
+    const now = Date.now();
+
+    if (!requestCounts.has(ip)) {
+        requestCounts.set(ip, { count: 1, firstRequest: now });
+        return next();
+    }
+
+    const userData = requestCounts.get(ip);
+    if (now - userData.firstRequest > RATE_LIMIT_WINDOW) {
+        userData.count = 1;
+        userData.firstRequest = now;
+        return next();
+    }
+
+    userData.count++;
+    if (userData.count > MAX_REQUESTS) {
+        return res.status(429).json({ error: 'Too many requests, please try again later.' });
+    }
+    next();
+};
+
+app.use('/api/', rateLimiter);
+
 const allowedOrigins = [
     process.env.APP_URL,
     'https://offthewalldigital.com',
@@ -16,33 +46,24 @@ const allowedOrigins = [
 
 app.use(cors({
     origin: function (origin, callback) {
-        // allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
         if (allowedOrigins.indexOf(origin) === -1) {
-            const msg = 'The CORS policy for this site does not ' +
-                'allow access from the specified Origin.';
-            return callback(new Error(msg), false);
+            return callback(new Error('CORS not allowed'), false);
         }
-        return callback(null, true);
+        callback(null, true);
     }
 }));
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 app.get('/', (req, res) => {
-    res.send('Stripe Backend is running on port 4242!');
+    res.send('Backend is operational.');
 });
 
 app.post('/api/create-checkout-session', async (req, res) => {
     try {
         const { priceId, affiliateId } = req.body;
-        console.log('--- New Checkout Session Request ---');
-        console.log('Price ID:', priceId);
-        console.log('Affiliate ID:', affiliateId);
-        console.log('APP_URL:', process.env.APP_URL);
-
-        const origin = req.headers.origin || process.env.APP_URL || 'http://localhost:3000';
-        console.log('Using origin for redirects:', origin);
+        const origin = req.headers.origin || process.env.APP_URL || 'https://offthewalldigital.com';
 
         const session = await stripe.checkout.sessions.create({
             line_items: [
@@ -61,15 +82,15 @@ app.post('/api/create-checkout-session', async (req, res) => {
 
         res.json({ url: session.url });
     } catch (err) {
-        console.error('Stripe error:', err.message);
-        res.status(500).json({ error: err.message });
+        console.error('Checkout error:', err.message);
+        res.status(500).json({ error: 'An error occurred during checkout. Please try again.' });
     }
 });
 
 app.post('/api/create-upsell-session', async (req, res) => {
     try {
         const { billingCycle, affiliateId } = req.body;
-        const origin = req.headers.origin || process.env.APP_URL || 'http://localhost:3000';
+        const origin = req.headers.origin || process.env.APP_URL || 'https://offthewalldigital.com';
 
         const priceId = billingCycle === 'annual'
             ? process.env.STRIPE_PRICE_ID_VOICE_ANNUAL
@@ -93,12 +114,11 @@ app.post('/api/create-upsell-session', async (req, res) => {
         res.json({ url: session.url });
     } catch (err) {
         console.error('Upsell error:', err.message);
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: 'An error occurred during upsell. Please try again.' });
     }
 });
 
-const PORT = 4242;
+const PORT = process.env.PORT || 4242;
 app.listen(PORT, () => {
-    console.log(`Backend server running on http://localhost:${PORT}`);
-    console.log('Stripe Price Monthly:', process.env.STRIPE_PRICE_ID_MONTHLY);
+    console.log(`Server running on port ${PORT}`);
 });
