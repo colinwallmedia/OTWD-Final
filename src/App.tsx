@@ -15,6 +15,8 @@ import { Checkout } from './pages/Checkout';
 import { ThankYou } from './pages/ThankYou';
 import { PaymentCanceled } from './pages/PaymentCanceled';
 import { Upsell } from './pages/Upsell';
+import { ReviewPage } from './pages/ReviewPage';
+
 
 export default function App() {
   const [currentPath, setCurrentPath] = useState('/');
@@ -72,6 +74,8 @@ export default function App() {
       case '/privacy':
       case '/terms':
         return <Legal />;
+      case '/review':
+        return <ReviewPage />;
       default:
         return (
           <>
@@ -90,16 +94,18 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-dark text-white selection:bg-accent selection:text-dark overflow-x-hidden">
-      <Nav
-        onNavigate={navigate}
-        isSubpage={currentPath !== '/'}
-      />
+      {currentPath !== '/review' && (
+        <Nav
+          onNavigate={navigate}
+          isSubpage={currentPath !== '/'}
+        />
+      )}
 
       <main>
         {renderPage()}
       </main>
 
-      <Footer onNavigate={navigate} />
+      {currentPath !== '/review' && <Footer onNavigate={navigate} />}
     </div>
   );
 }
